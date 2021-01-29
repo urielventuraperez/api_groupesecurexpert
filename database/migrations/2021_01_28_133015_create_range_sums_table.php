@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTitleDetailsTable extends Migration
+class CreateRangeSumsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class CreateTitleDetailsTable extends Migration
      */
     public function up()
     {
-        Schema::create('title_details', function (Blueprint $table) {
+        Schema::create('range_sums', function (Blueprint $table) {
             $table->id();
+            $table->string('range');
+            $table->foreignId('rate_id')->constrained('rates');
             $table->timestamps();
         });
     }
@@ -26,6 +28,6 @@ class CreateTitleDetailsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('title_details');
+        Schema::dropIfExists('range_sums');
     }
 }

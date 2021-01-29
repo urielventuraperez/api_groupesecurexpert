@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDeductiblesTable extends Migration
+class CreateTitleDetailsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreateDeductiblesTable extends Migration
      */
     public function up()
     {
-        Schema::create('deductibles', function (Blueprint $table) {
+        Schema::create('title_details', function (Blueprint $table) {
             $table->id();
-            $table->double('option', 2, 1);
-            $table->float('applicable', 2, 1);
-            $table->boolean('is_saving');
-            $table->foreignId('company_id')->constrained('companies');
+            $table->string('ntame');
+            $table->mediumText('description')->nullable();
             $table->timestamps();
         });
     }
@@ -30,6 +28,6 @@ class CreateDeductiblesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('deductibles');
+        Schema::dropIfExists('title_details');
     }
 }

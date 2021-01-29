@@ -15,6 +15,9 @@ class CreateRatesTable extends Migration
     {
         Schema::create('rates', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
+            $table->longText('description')->nullable();
+            $table->foreignId('company_id')->constrained('companies');
             $table->timestamps();
         });
     }

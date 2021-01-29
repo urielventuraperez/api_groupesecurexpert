@@ -15,6 +15,8 @@ class CreateRangeYearsTable extends Migration
     {
         Schema::create('range_years', function (Blueprint $table) {
             $table->id();
+            $table->string('range');
+            $table->foreignId('rate_id')->constrained('rates');
             $table->timestamps();
         });
     }
