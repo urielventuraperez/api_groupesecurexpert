@@ -10,7 +10,11 @@ class Visitor extends Model
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = [
+        'email',
+        'city',
+        'country'
+    ];
 
     /**
      * The attributes excluded from the model's JSON form.

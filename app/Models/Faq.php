@@ -10,7 +10,10 @@ class Faq extends Model
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = [
+        'ask',
+        'answer'
+    ];
 
     /**
      * The attributes excluded from the model's JSON form.

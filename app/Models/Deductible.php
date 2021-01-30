@@ -10,7 +10,11 @@ class Deductible extends Model
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = [
+        'is_saving',
+        'value',
+        'percentage'
+    ];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -18,4 +22,8 @@ class Deductible extends Model
      * @var array
      */
     protected $hidden = [];
+
+    protected $attributes = [
+        'is_saving' => true,
+    ];
 }

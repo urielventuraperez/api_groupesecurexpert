@@ -15,7 +15,7 @@ class CreateTitleDetailsTable extends Migration
     {
         Schema::create('title_details', function (Blueprint $table) {
             $table->id();
-            $table->string('ntame');
+            $table->string('name');
             $table->mediumText('description')->nullable();
             $table->timestamps();
         });

@@ -10,7 +10,10 @@ class SocialFacebookAccount extends Model
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = [
+        'name',
+        'description'
+    ];
 
     /**
      * The attributes excluded from the model's JSON form.

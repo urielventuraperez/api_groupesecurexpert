@@ -10,7 +10,9 @@ class Detail extends Model
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = [
+        'content'
+    ];
 
     /**
      * The attributes excluded from the model's JSON form.

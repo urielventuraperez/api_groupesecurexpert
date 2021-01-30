@@ -10,7 +10,9 @@ class Benefit extends Model
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = [
+        'sum'
+    ];
 
     /**
      * The attributes excluded from the model's JSON form.
