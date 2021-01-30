@@ -1,0 +1,85 @@
+<?php
+
+namespace App\Http\Controllers;
+use Illuminate\Http\Request;
+use App\Models\Faq;
+
+class FaqController extends Controller
+{
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        //
+    }
+
+    public function index() {
+        $faq = Faq::paginate(15);
+
+        if ($faq) {
+            return response([
+                'status' => true,
+                'message' => '',
+                'data' => $faq
+            ]);
+        } else {
+
+        }
+
+    }
+
+    public function show($id) {
+        $faq = Faq::findOrFail($id);
+        if ($faq) {
+            return response(['status' => true, 'message' => '', 'data' => $faq]);
+        } else {
+            return response(['status' => false, 'message' => 'doesn´t exist the register']);
+        }
+    }
+
+    public function create(Request $request) {
+        $faq = new Faq();
+        
+        $faq->email = $request['email'];
+        $faq->city = $request['city'];
+        $faq->country = $request['country'];
+
+        if(!$faq->save()) {
+            return response(['status'=>false, 'message' => 'retry again, cannot save the register', 'data'=>[]]);
+        }
+
+        return response(['status'=>true, 'message' => 'Register successfully created!', 'data'=>[]]);
+
+    }
+    
+    public function update(Request $request, $id) {
+        $faq = Faq::find($id);
+
+        $faq->email = $request['email'] ?? $faq->email;
+        $faq->city = $request['city'] ?? $faq->city;
+        $faq->country = $request['country'] ?? $faq->country;
+
+        if(!$faq->save()) {
+            return response(['status'=>false, 'message' => 'retry again, cannot update the register', 'data'=>[]]);
+        }
+
+        return response(['status'=>true, 'message' => 'Register successfully updated!', 'data'=>[]]);        
+
+    }
+
+    public function delete($id) {
+        $faq = Faq::findOrFail($id);
+
+        if(!$faq->delete()) {
+            return response(['status'=>false, 'message' => 'retry again, cannot delete the register', 'data'=>[]]);
+        }
+
+        return response(['status'=>true, 'message' => 'Register successfully deleted!', 'data'=>[]]);
+    }
+
+
+
+}
