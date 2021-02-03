@@ -12,7 +12,9 @@ class Faq extends Model
      */
     protected $fillable = [
         'ask',
-        'answer'
+        'answer',
+        'active',
+        'slug'
     ];
 
     /**

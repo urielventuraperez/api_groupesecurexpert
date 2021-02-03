@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Faq;
 
+use Illuminate\Support\Str;
+use Validator;
+
 class FaqController extends Controller
 {
     /**
@@ -17,7 +20,7 @@ class FaqController extends Controller
     }
 
     public function index() {
-        $faq = Faq::paginate(15);
+        $faq = Faq::where('active', 1)->paginate(15);
 
         if ($faq) {
             return response([
@@ -41,15 +44,19 @@ class FaqController extends Controller
     }
 
     public function create(Request $request) {
-        $faq = new Faq();
-        
-        $faq->email = $request['email'];
-        $faq->city = $request['city'];
-        $faq->country = $request['country'];
+        $validator = Validator::make($request->all(), [
+            'ask' => 'required',
+            'answer' => 'required'
+        ]);
 
-        if(!$faq->save()) {
-            return response(['status'=>false, 'message' => 'retry again, cannot save the register', 'data'=>[]]);
+        if($validator->fails()){
+            return response(['message' => 'Validation errors', 'errors' =>  $validator->errors(), 'status' => false], 422);
         }
+
+        $input = $request->all();
+        $input['slug'] = Str::of($request->ask)->slug('-');
+        $faq = new Faq();
+        $faq::create($input);
 
         return response(['status'=>true, 'message' => 'Register successfully created!', 'data'=>[]]);
 
