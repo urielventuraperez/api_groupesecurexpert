@@ -22,15 +22,18 @@ $router->post('/login','UserController@login');
 
 //Auth routes middleware
 $router->group(['prefix' => 'api'], function () use ($router) {
-    // User methods
+    // Users
     $router->post('/register','UserController@register');
     $router->post('/logout','UserController@logout');
     $router->post('/update/password','UserController@updatePassword');
     $router->get('users','UserController@getUsers');
 
-    // Faq methods
+    // Faqs
     $router->get('/faq', 'FaqController@index');
     $router->get('faq/{id}', 'FaqController@show');
     $router->post('/faq','FaqController@create');
 
+    // Visitors
+    $router->get('/visitors', 'VisitorController@index');
+    $router->post('/visitors','VisitorController@create');
 });

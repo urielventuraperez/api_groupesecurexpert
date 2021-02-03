@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Visitor;
+use Validator;
 
 class VisitorController extends Controller
 {
@@ -41,16 +42,16 @@ class VisitorController extends Controller
     }
 
     public function create(Request $request) {
-        $visitor = new Visitor();
-        
-        $visitor->email = $request['email'];
-        $visitor->city = $request['city'];
-        $visitor->country = $request['country'];
-
-        if(!$visitor->save()) {
-            return response(['status'=>false, 'message' => 'retry again, cannot save the register', 'data'=>[]]);
+        $validator = Validator::make($request->all(), [
+            'email'=>'required|email',
+        ]);
+        if($validator->fails()){
+            return response(['message' => 'Validation errors', 'errors' =>  $validator->errors(), 'status' => false], 422);
         }
 
+        $visitor = new Visitor();
+        $visitor->create($request->all());
+        
         return response(['status'=>true, 'message' => 'Register successfully created!', 'data'=>[]]);
 
     }
