@@ -60,7 +60,7 @@ class UserController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
-        if($user) {
+        if($user && $user->active == 1) {
 
             if (Hash::check($request->password, $user->password)) {
                 $token = $user->createToken('api_groupesecurexpert')->accessToken;
@@ -117,6 +117,25 @@ class UserController extends Controller
             return response([ 'status'=>false, 'message'=>'No users', 'data'=>[] ]);
         }
         return response([ 'status'=>true, 'message'=>'', 'data'=>[$users] ]);
+    }
+
+    public function profile(Request $request) {
+        $user = $request->user();
+
+        if($user) {
+            $role = User::find($request->user()->id)->role->name;
+
+            $data['name'] = $request->user()->name;
+            $data['lastname'] = $request->user()->last_name;
+            $data['email'] = $request->user()->email;
+            $data['last_logged_in'] = $request->user()->last_logged_in;
+            $data['role'] = $role;
+            
+            return response(['status'=>true, 'message'=>'', 'data'=>$data]);
+        }
+
+        return respomse(['status'=>false, 'message'=>'No user', 'data'=>[]])
+
     }
 
 }
