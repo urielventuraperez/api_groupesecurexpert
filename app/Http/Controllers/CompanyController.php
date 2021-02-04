@@ -5,6 +5,8 @@ use Illuminate\Http\Request;
 use App\Models\Company;
 use Illuminate\Support\Str;
 
+use Carbon\Carbon;
+
 use Validator;
 
 class CompanyController extends Controller
@@ -49,7 +51,6 @@ class CompanyController extends Controller
             'name' => 'required',
             'description' => 'required',
             'quote' => 'min:10',
-            'logo' => 'min:10',
             'order_url' => 'min:10'
         ]);
 
@@ -58,11 +59,13 @@ class CompanyController extends Controller
         }
 
         $input = $request->all();
+        $input['logo'] = $request->file('logo')->getClientOriginalName();
         $input['slug'] = Str::of($request->name)->slug('-');
         $company = new Company();
         if(!$company->create($input)) {
             return response(['status'=>false, 'message' => 'retry again, cannot save the register', 'data'=>[]]);
         }
+        $request->file('logo')->storeAs('companies', $input['logo']);
 
         return response(['status'=>true, 'message' => 'Register successfully created!', 'data'=>[]]);
 
