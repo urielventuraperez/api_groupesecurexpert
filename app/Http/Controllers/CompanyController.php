@@ -5,6 +5,8 @@ use Illuminate\Http\Request;
 use App\Models\Company;
 use Illuminate\Support\Str;
 
+use Validator;
+
 class CompanyController extends Controller
 {
     /**
@@ -42,13 +44,23 @@ class CompanyController extends Controller
     }
 
     public function create(Request $request) {
-        $company = new Company();
-        
-        $company->email = $request['email'];
-        $company->city = $request['city'];
-        $company->country = $request['country'];
 
-        if(!$company->save()) {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'description' => 'required',
+            'quote' => 'min:10',
+            'logo' => 'min:10',
+            'order_url' => 'min:10'
+        ]);
+
+        if($validator->fails()){
+            return response(['message' => 'Validation errors', 'errors' =>  $validator->errors(), 'status' => false], 422);
+        }
+
+        $input = $request->all();
+        $input['slug'] = Str::of($request->name)->slug('-');
+        $company = new Company();
+        if(!$company->create($input)) {
             return response(['status'=>false, 'message' => 'retry again, cannot save the register', 'data'=>[]]);
         }
 
@@ -79,10 +91,20 @@ class CompanyController extends Controller
         }
 
         return response(['status'=>true, 'message' => 'Register successfully deleted!', 'data'=>[]]);
-
-
     }
 
+    public function active($id) {
+        $company = Company::findOrFail($id);
+
+        $company->active = !$company->active;
+
+        if(!$company->save()) {
+            return response(['status'=>false, 'message' => 'retry again, cannot delete the register', 'data'=>[]]);
+        }
+
+        return response(['status'=>true, 'message' => 'Register successfully updated!', 'data'=>[]]);
+
+    }
 
 
 }

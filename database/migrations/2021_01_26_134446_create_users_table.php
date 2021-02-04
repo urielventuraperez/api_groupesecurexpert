@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('email');
             $table->string('password');
             $table->timestamp('last_logged_in')->nullable();
+            $table->foreignId('role_id')->constrained('roles');
             $table->timestamps();
         });
     }

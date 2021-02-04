@@ -130,11 +130,11 @@ class UserController extends Controller
             $data['email'] = $request->user()->email;
             $data['last_logged_in'] = $request->user()->last_logged_in;
             $data['role'] = $role;
-            
+
             return response(['status'=>true, 'message'=>'', 'data'=>$data]);
         }
 
-        return respomse(['status'=>false, 'message'=>'No user', 'data'=>[]])
+        return response(['status'=>false, 'message'=>'No user', 'data'=>[]]);
 
     }
 

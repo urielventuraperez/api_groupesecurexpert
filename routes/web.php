@@ -37,4 +37,9 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     // Visitors
     $router->get('/visitors', 'VisitorController@index');
     $router->post('/visitors','VisitorController@create');
+
+    // Companies
+    $router->post('/company', 'CompanyController@create');
+    $router->delete('/company/{id}', 'CompanyController@delete');
+    $router->post('company/{id}', 'CompanyController@active');
 });
