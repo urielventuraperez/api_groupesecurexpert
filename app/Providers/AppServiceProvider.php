@@ -17,5 +17,7 @@ class AppServiceProvider extends ServiceProvider
         LumenPassport::allowMultipleTokens();
     }
 
-    public function boot() { LumenPassport::routes($this->app); }
+    public function boot() { 
+        \Dusterio\LumenPassport\LumenPassport::routes($this->app->router, ['prefix' => 'api'] ); 
+    }
 }

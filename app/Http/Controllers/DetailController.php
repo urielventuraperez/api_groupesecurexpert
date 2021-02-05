@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use App\Models\Detail;
+use App\Models\TitleDetail as Detail;
 
 class DetailController extends Controller
 {
@@ -43,9 +43,8 @@ class DetailController extends Controller
     public function create(Request $request) {
         $detail = new Detail();
         
-        $detail->email = $request['email'];
-        $detail->city = $request['city'];
-        $detail->country = $request['country'];
+        $detail->name = $request['name'];
+        $detail->description = $request['description'];
 
         if(!$detail->save()) {
             return response(['status'=>false, 'message' => 'retry again, cannot save the register', 'data'=>[]]);
@@ -58,9 +57,8 @@ class DetailController extends Controller
     public function update(Request $request, $id) {
         $detail = Detail::find($id);
 
-        $detail->email = $request['email'] ?? $detail->email;
-        $detail->city = $request['city'] ?? $detail->city;
-        $detail->country = $request['country'] ?? $detail->country;
+        $detail->name = $request['name'] ?? $detail->name;
+        $detail->description = $request['description'] ?? $detail->description;
 
         if(!$detail->save()) {
             return response(['status'=>false, 'message' => 'retry again, cannot update the register', 'data'=>[]]);

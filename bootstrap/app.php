@@ -81,7 +81,6 @@ $app->routeMiddleware([
     'client' => Laravel\Passport\Http\Middleware\CheckClientCredentials::class,
 ]);
 
-Dusterio\LumenPassport\LumenPassport::routes($app->router, ['prefix' => 'api/oauth'] );
 /*
 |--------------------------------------------------------------------------
 | Register Service Providers

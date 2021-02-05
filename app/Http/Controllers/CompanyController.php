@@ -38,8 +38,13 @@ class CompanyController extends Controller
 
     public function show($id) {
         $company = Company::findOrFail($id);
+        $details = $company->details()->get();
+        $company['details'] = $details;
         if ($company) {
-            return response(['status' => true, 'message' => '', 'data' => $company]);
+            return response([
+                'status' => true, 
+                'message' => '', 
+                'data' => $company]);
         } else {
             return response(['status' => false, 'message' => 'doesn´t exist the register']);
         }
@@ -109,5 +114,14 @@ class CompanyController extends Controller
 
     }
 
+    public function addDetail($id, Request $request) {
+
+        $company = Company::find($id);
+        $detail_id = $request->detail;
+        $content = $request->content;
+        $company->details()->attach($detail_id, ['content'=>$content]);
+        return response(['message'=>'save']);
+
+    }
 
 }

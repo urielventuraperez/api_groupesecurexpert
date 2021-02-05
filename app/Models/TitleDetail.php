@@ -11,7 +11,7 @@ class TitleDetail extends Model
      * @var array
      */
     protected $fillable = [
-        'name'
+        'name', 'description', 'content'
     ];
 
     /**
@@ -19,5 +19,14 @@ class TitleDetail extends Model
      *
      * @var array
      */
-    protected $hidden = [];
+    protected $hidden = [
+        
+    ];
+
+    
+    public function companies()
+    {
+        return $this->belongsToMany('App\Models\Company', 'details');
+    }
+
 }

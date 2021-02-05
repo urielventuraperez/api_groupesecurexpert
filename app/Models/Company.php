@@ -25,4 +25,10 @@ class Company extends Model
      * @var array
      */
     protected $hidden = [];
+
+    public function details()
+    {
+        return $this->belongsToMany('App\Models\TitleDetail', 'details')->withPivot('content');;
+    }
+
 }
