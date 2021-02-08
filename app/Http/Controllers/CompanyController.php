@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Company;
+use App\Models\Deductible;
+
 use Illuminate\Support\Str;
 
 use Carbon\Carbon;
@@ -38,8 +40,13 @@ class CompanyController extends Controller
 
     public function show($id) {
         $company = Company::findOrFail($id);
+
         $details = $company->details()->get();
+        $deductibles = $company->deductibles()->get();
+        
         $company['details'] = $details;
+        $company['deductibles'] = $deductibles;
+
         if ($company) {
             return response([
                 'status' => true, 
@@ -114,13 +121,13 @@ class CompanyController extends Controller
 
     }
 
-    public function addDetail($id, Request $request) {
+    public function relationDetail($id, Request $request) {
 
         $company = Company::find($id);
         $detail_id = $request->detail;
         $content = $request->content;
         $company->details()->attach($detail_id, ['content'=>$content]);
-        return response(['message'=>'save']);
+        return response(['status'=>true, 'message'=>'save', 'data'=>[]]);
 
     }
 

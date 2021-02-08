@@ -44,7 +44,20 @@ $router->group(['prefix' => 'api', 'middleware' => ['auth', 'client']], function
     $router->get('/company/{id}', 'CompanyController@show');
     $router->delete('/company/{id}', 'CompanyController@delete');
     $router->post('company/{id}', 'CompanyController@active');
-    $router->post('company/{id}/detail', 'CompanyController@addDetail');
+    $router->post('company/{id}/detail', 'CompanyController@relationDetail');
+    // Update many to many detail
+    // Delete many to many detail
 
-    //Details
+    // Deductible
+    $router->post('company/{id_company}/deductible', 'DeductibleController@create');
+    $router->delete('company/{id_company}/deductible/{id_deductible}', 'DeductibleController@delete');
+
+    // Rates
+    $router->post('company/{id_company}/rate', 'RateController@create');
+    $router->delete('company/{id_company}/rate/{id_rate}', 'RateController@delete');
+
+    // Details
+    // add
+    // update
+    // delete
 });

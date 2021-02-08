@@ -3,7 +3,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Deductible extends Model
+class Rate extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -11,9 +11,8 @@ class Deductible extends Model
      * @var array
      */
     protected $fillable = [
-        'is_saving',
-        'option',
-        'applicable'
+        'title',
+        'description',
     ];
 
     /**
@@ -22,10 +21,6 @@ class Deductible extends Model
      * @var array
      */
     protected $hidden = [];
-
-    protected $attributes = [
-        'is_saving' => true,
-    ];
 
     public function company()
     {

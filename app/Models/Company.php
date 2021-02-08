@@ -31,4 +31,13 @@ class Company extends Model
         return $this->belongsToMany('App\Models\TitleDetail', 'details')->withPivot('content');;
     }
 
+    public function deductibles()
+    {
+        return $this->hasMany(Deductible::class);
+    }
+
+    public function rates()
+    {
+        return $this->hasMany(Rate::class);
+    }
 }

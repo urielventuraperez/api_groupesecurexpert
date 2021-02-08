@@ -15,8 +15,8 @@ class CreateDeductiblesTable extends Migration
     {
         Schema::create('deductibles', function (Blueprint $table) {
             $table->id();
-            $table->double('option', 2, 1);
-            $table->float('applicable', 2, 1);
+            $table->double('option', 16, 2);
+            $table->float('applicable', 4, 2);
             $table->boolean('is_saving');
             $table->foreignId('company_id')->constrained('companies');
             $table->timestamps();
