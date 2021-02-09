@@ -15,8 +15,9 @@ class CreateRangeSumsTable extends Migration
     {
         Schema::create('range_sums', function (Blueprint $table) {
             $table->id();
-            $table->string('range');
-            $table->foreignId('rate_id')->constrained('rates');
+            $table->double('sum', 16, 2);
+            $table->double('value', 5, 2);
+            $table->foreignId('range_years_id')->constrained('range_years');
             $table->timestamps();
         });
     }

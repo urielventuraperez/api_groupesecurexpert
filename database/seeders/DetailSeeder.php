@@ -30,6 +30,9 @@ class DetailSeeder extends Seeder
             'name'=>'Rates',
         ]);
         DB::table('title_details')->insert([
+            'name'=>'Limitations',
+        ]);
+        DB::table('title_details')->insert([
             'name'=>'Downloads',
         ]);
     }

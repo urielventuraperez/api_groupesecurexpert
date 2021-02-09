@@ -43,9 +43,11 @@ class CompanyController extends Controller
 
         $details = $company->details()->get();
         $deductibles = $company->deductibles()->get();
-        
+        $rates = $company->rates()->get();
+
         $company['details'] = $details;
         $company['deductibles'] = $deductibles;
+        $company['rates'] = $rates;
 
         if ($company) {
             return response([

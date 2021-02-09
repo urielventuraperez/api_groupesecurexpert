@@ -89,7 +89,7 @@ class UserController extends Controller
     public function updatePassword(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'password' => 'required|min:6'
+            'new_password' => 'required|min:6'
         ]);
 
         if($validator->fails()){
@@ -99,16 +99,23 @@ class UserController extends Controller
         $email = $request->user()->email;        
         $userUpdatePassword = User::where('email', $email)->first();
 
-        $password = $request->password;
-        $password = Hash::make($password);
+        $currentPassword = $request->current_password;
 
-        $userUpdatePassword->password = $password;
-
-        if(!$userUpdatePassword->save()) {
-            return response(['status'=>false, 'message'=>'Password change fail', 'data'=>'']);
+        if (Hash::check($currentPassword, $userUpdatePassword->password)) {
+            $newPassword = $request->new_password;
+            $newPassword = Hash::make($newPassword);
+    
+            $userUpdatePassword->password = $newPassword;
+    
+            if(!$userUpdatePassword->save()) {
+                return response(['status'=>false, 'message'=>'Password change fail', 'data'=>'']);
+            } else {
+                return response(['status'=>true, 'message'=>'Password change Successful', 'data'=>'']);
+            }
         } else {
-            return response(['status'=>true, 'message'=>'Password change Successful', 'data'=>'']);
+            return response(['status'=>false, 'message'=>'Password dosn´t mismatch', 'data'=>[]]);
         }
+
     }
 
     public function getUsers() {

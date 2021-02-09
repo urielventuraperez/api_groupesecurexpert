@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Company;
+use App\Models\RangeYear;
 use App\Models\Rate;
 
 use Validator;
@@ -17,6 +18,21 @@ class RateController extends Controller
     public function __construct()
     {
         //
+    }
+
+    public function show($id)
+    {
+        $rate = Rate::find($id);
+
+        if($rate) {
+            $years = $rate::with('rangeYear', 'rangeYear.rangeSums')->get();
+
+            $rate['range'] = $years;
+
+            return response(['data'=>[$rate]]);
+        }
+
+
     }
 
     public function create($id_company, Request $request) {
@@ -61,6 +77,44 @@ class RateController extends Controller
 
     }
 
+    public function addRangeYear($id, Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'range' => 'required',
+        ]);
 
+        if($validator->fails()){
+            return response(['message' => 'Validation errors', 'errors' =>  $validator->errors(), 'status' => false], 422);
+        }
+        
+        $input = $request->all();
+
+        $rangeYear = new RangeYear($input);
+        $rate = Rate::find($id);
+    
+        $rate->rangeYear()->save($rangeYear);
+
+        return response([
+            'message' => 'Succesfull',
+            'data' => []
+        ]);
+
+    }
+
+    public function updateRangeYear($id_rate, $id_year, Request $request)
+    {
+
+        $rate = Rate::find($id_rate);
+        $rangeYear = $rate->rangeYear()->find($id_year);
+
+        $rangeYear->range = $request['range'] ?? $rangeYear->range;
+
+        if(!$rangeYear->save()) {
+            return response(['status'=>false, 'message' => 'retry again, cannot update the register', 'data'=>[]]);
+        }
+
+        return response(['status'=>true, 'message' => 'Register successfully updated!', 'data'=>[]]);        
+
+    }
 
 }

@@ -53,8 +53,17 @@ $router->group(['prefix' => 'api', 'middleware' => ['auth', 'client']], function
     $router->delete('company/{id_company}/deductible/{id_deductible}', 'DeductibleController@delete');
 
     // Rates
+    $router->get('rate/{id}','RateController@show'); // Show rates
     $router->post('company/{id_company}/rate', 'RateController@create');
     $router->delete('company/{id_company}/rate/{id_rate}', 'RateController@delete');
+
+    // Range sums to Rates
+    $router->post('rate/{id}/year','RateController@addRangeYear');
+    $router->post('rate/{id_rate}/year/{id_year}','RateController@updateRangeYear');
+
+    // Range sums to Rates
+    $router->post('year/{id}/sum','RangeYearController@addSum');
+    $router->post('year/{id_range}/sum/{id_sum}','RangeYearController@updateSum');   
 
     // Details
     // add
