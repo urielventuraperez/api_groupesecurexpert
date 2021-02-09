@@ -36,15 +36,22 @@ class UserController extends Controller
             return response(['message' => 'Validation errors', 'errors' =>  $validator->errors(), 'status' => false], 422);
         }
 
-        $input = $request->all();
-        $input['password'] = Hash::make($input['password']);
-        $user = User::create($input);
-      
-        /**Take note of this: Your user authentication access token is generated here **/
-        $data['token'] =  $user->createToken('api_groupesecurexpert')->accessToken;
-        $data['name'] =  $user->email;
+        $rol = User::find($request->user()->id)->role->name;
 
-        return response(['data' => $data, 'message' => 'Account created successfully!', 'status' => true]);
+        if ( $rol == 'Admin' ) {
+            $input = $request->all();
+            $input['password'] = Hash::make($input['password']);
+            $user = User::create($input);
+            
+            /**Take note of this: Your user authentication access token is generated here **/
+            $user->createToken('api_groupesecurexpert')->accessToken;
+            $newUser =  $user->email;
+
+            return response(['data' => [], 'message' => $newUser . ' account created successfully!', 'status' => true]);
+        } else {
+            return response(['data' => [], 'message' => 'Unauthorized', 'status' => false]);
+        }
+
     }
 
     public function login(Request $request)
@@ -118,12 +125,63 @@ class UserController extends Controller
 
     }
 
-    public function getUsers() {
-        $users = User::all();
-        if(!$users) {
-            return response([ 'status'=>false, 'message'=>'No users', 'data'=>[] ]);
+    public function updateProfile(Request $request)
+    {
+        $user = User::find($request->user()->id);
+        $user->name = $request->name ?? $user->name;
+        $user->last_name = $request->lastname ?? $user->last_name;
+        $user->email = $request->email ?? $user->email;
+
+        if ($user->save()) {
+            return response(['status'=>true, 'message'=>'yeaah!', 'data'=>[]]);
         }
-        return response([ 'status'=>true, 'message'=>'', 'data'=>[$users] ]);
+
+    }
+
+    public function getUsers(Request $request) {
+        $rol = User::find($request->user()->id)->role->name;
+
+        if($rol == 'Admin') {
+            $users = User::where('email', '!=', $request->user()->email)->get();
+            if(!$users) {
+                return response([ 'status'=>false, 'message'=>'No users', 'data'=>[] ]);
+            }
+            return response([ 'status'=>true, 'message'=>'', 'data'=>[$users] ]);
+        } else {
+            return response(['status'=>false, 'message'=>'Unauthorized', 'data'=>[]]);
+        }
+
+    }
+
+    public function deleteUser($id, Request $request) {
+        $rol = User::find($request->user()->id)->role->name;
+
+        if($rol == 'Admin') {
+            $users = User::findOrFail($id);
+            if(!$users->delete()) {
+                return response([ 'status'=>false, 'message'=>'Can´t deleted the user', 'data'=>[] ]);
+            }
+            return response([ 'status'=>true, 'message'=>'User deleted', 'data'=>[$users] ]);
+        } else {
+            return response(['status'=>false, 'message'=>'Unauthorized', 'data'=>[]]);
+        }
+
+    }
+
+    public function activeUser($id, Request $request) {
+        $rol = User::find($request->user()->id)->role->name;
+
+        if($rol == 'Admin') {
+            $user = User::findOrFail($id);
+            $user->active = !$user->active;
+            if(!$user->save()) {
+                return response([ 'status'=>false, 'message'=>'Can´t deleted the user', 'data'=>[] ]);
+            }
+            return response([ 'status'=>true, 'message'=>'User deleted', 'data'=>[] ]);
+        } else {
+            return response(['status'=>false, 'message'=>'Unauthorized', 'data'=>[]]);
+        }
+
     }
 
     public function profile(Request $request) {

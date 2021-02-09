@@ -63,4 +63,19 @@ class RangeYearController extends Controller
 
     }
 
+    public function deleteeSum($id_range, $id_sum)
+    {
+
+        $rangeYear = RangeYear::find($id_range);
+        $rangeSum = $rangeYear->rangeSum()->find($id_sum);
+
+        if(!$rangeSum->delete()) {
+            return response(['status'=>false, 'message' => 'retry again, cannot delete the register', 'data'=>[]]);
+        }
+
+        return response(['status'=>true, 'message' => 'Register successfully deleted!', 'data'=>[]]);        
+
+    }
+
+
 }

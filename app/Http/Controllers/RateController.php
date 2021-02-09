@@ -56,6 +56,29 @@ class RateController extends Controller
 
     }
 
+    public function update($id_company, $id_rate, Request $request) {
+
+        $company = Company::find($id_company);
+        $rates = $company->rates()->find($id_rate);
+
+        $rates->title = $request->title ?? $rates->title;
+
+        if(!$rates->save()) {
+            return response([
+                'status' => false,
+                'message' => 'Fail to update',
+                'data' => []
+            ]);
+        }
+
+        return response([
+            'status' => true,
+            'message' => 'Oh yeah!',
+            'data' => []
+        ]);
+
+    }
+
     public function delete($id_company, $id_rate) {
 
         $company = Company::find($id_company);
@@ -114,6 +137,20 @@ class RateController extends Controller
         }
 
         return response(['status'=>true, 'message' => 'Register successfully updated!', 'data'=>[]]);        
+
+    }
+
+    public function deleteRangeYear($id_rate, $id_year)
+    {
+
+        $rate = Rate::find($id_rate);
+        $rangeYear = $rate->rangeYear()->find($id_year);
+
+        if(!$rangeYear->delete()) {
+            return response(['status'=>false, 'message' => 'retry again, cannot delete the register', 'data'=>[]]);
+        }
+
+        return response(['status'=>true, 'message' => 'Register successfully deleted!', 'data'=>[]]);        
 
     }
 
