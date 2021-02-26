@@ -23,6 +23,10 @@ $app = new \Dusterio\LumenPassport\Lumen7Application(
     dirname(__DIR__)
 );
 
+$app->middleware([
+    App\Http\Middleware\CorsMiddleware::class
+ ]);
+
 $app->withFacades();
 
 $app->withEloquent();
