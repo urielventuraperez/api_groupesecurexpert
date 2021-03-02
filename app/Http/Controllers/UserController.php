@@ -71,12 +71,18 @@ class UserController extends Controller
 
             if (Hash::check($request->password, $user->password)) {
                 $token = $user->createToken('api_groupesecurexpert')->accessToken;
-
                 $lastLoggedIn = Carbon::now();
                 $user->last_logged_in = $lastLoggedIn->toDateTimeString();
-                $user->save();                
+                $user->save();
+                
+                $role = $user->role->name;
+                $logged['name'] = $user->name;
+                $logged['lastname'] = $user->last_name;
+                $logged['email'] = $user->email;
+                $logged['last_logged_in'] = $user->last_logged_in;
+                $logged['role'] = $role;
 
-                return response([ 'status' => true, 'message' => '', 'data'=>['token' => $token ] ]);
+                return response([ 'status' => true, 'message' => '', 'data'=>['token' => $token, 'user' => $logged ] ]);
             } else {
                 return response([ 'status' => false, 'message' => 'Password mismatch', 'data' => [] ]);
             }

@@ -46,6 +46,7 @@ $router->group(['prefix' => 'api', 'middleware' => ['auth', 'client']], function
 
     // Companies
     // Mostrar todos
+    $router->get('/company', 'CompanyController@index');
     $router->post('/company', 'CompanyController@create');
     $router->get('/company/{id}', 'CompanyController@show');
     $router->delete('/company/{id}', 'CompanyController@delete');
