@@ -32,6 +32,10 @@ $router->group(['prefix' => 'api', 'middleware' => ['auth', 'client']], function
     $router->get('/users','UserController@getUsers');
     $router->get('/me','UserController@profile');
 
+    // Roles
+    $router->get('/roles','RoleController@index');
+
+
     // Faqs
     $router->get('/faq', 'FaqController@index');
     $router->get('faq/{id}', 'FaqController@show');
