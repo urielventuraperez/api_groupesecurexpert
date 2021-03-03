@@ -139,7 +139,13 @@ class UserController extends Controller
         $user->email = $request->email ?? $user->email;
 
         if ($user->save()) {
-            return response(['status'=>true, 'message'=>'yeaah!', 'data'=>[]]);
+            return response(['status'=>true, 'message'=>'Successfully updated!', 'data'=>[
+              'name' => $user->name,
+              'lastname' => $user->last_name,
+              'email' => $user->email,
+              'last_logged_in' => $user->last_logged_in,
+              'role' => $user->role->name
+              ]]);
         }
 
     }
