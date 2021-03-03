@@ -138,7 +138,7 @@ class UserController extends Controller
         $user->last_name = $request->lastname ?? $user->last_name;
         $user->email = $request->email ?? $user->email;
         
-        $user->role()->associate($request->role ?? $user->role->id);
+        $user->role()->associate($request->role != '' ? $request->role : $user->role->id);
 
         if ($user->save()) {
             return response(['status'=>true, 'message'=>'Successfully updated!', 'data'=>[
