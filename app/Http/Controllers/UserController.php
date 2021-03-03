@@ -36,9 +36,9 @@ class UserController extends Controller
             return response(['message' => 'Validation errors', 'errors' =>  $validator->errors(), 'status' => false], 422);
         }
 
-        $rol = User::find($request->user()->id)->role->name;
+        $rol = User::find($request->user()->id)->role->id;
 
-        if ( $rol == 'Admin' ) {
+        if ( $rol == 1 ) {
             $input = $request->all();
             $input['password'] = Hash::make($input['password']);
             $user = User::create($input);
