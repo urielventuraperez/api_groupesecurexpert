@@ -29,7 +29,8 @@ class UserController extends Controller
             'name' => 'required',
             'last_name' => 'required',
             'email' => 'required|email',
-            'password' => 'required|min:6'
+            'password' => 'required|min:6',
+            'role_id' => 'required'
         ]);
 
         if($validator->fails()){
@@ -40,7 +41,17 @@ class UserController extends Controller
 
         if ( $rol == 1 ) {
             $input = $request->all();
+            
+            if(User::where('email', $input['email'])->first()) {
+                return response([
+                    'status' => false,
+                    'message' => 'There is a registered user with this account',
+                    'data' => []
+                ]);
+            }
+            
             $input['password'] = Hash::make($input['password']);
+            
             $user = User::create($input);
             
             /**Take note of this: Your user authentication access token is generated here **/
