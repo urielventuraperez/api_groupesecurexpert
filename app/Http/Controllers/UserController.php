@@ -29,7 +29,7 @@ class UserController extends Controller
             'name' => 'required',
             'last_name' => 'required',
             'email' => 'required|email',
-            'password' => 'required|min:6',
+            'password' => 'required|min:8',
             'role_id' => 'required'
         ]);
 
@@ -69,7 +69,7 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|string|email',
-            'password' => 'required|string|min:6'
+            'password' => 'required|string'
         ]);
         
         if($validator->fails()) {
@@ -113,7 +113,8 @@ class UserController extends Controller
     public function updatePassword(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'new_password' => 'required|min:6'
+            'current_password' => 'required|min:8',
+            'new_password' => 'required|min:8'
         ]);
 
         if($validator->fails()){
@@ -132,9 +133,9 @@ class UserController extends Controller
             $userUpdatePassword->password = $newPassword;
     
             if(!$userUpdatePassword->save()) {
-                return response(['status'=>false, 'message'=>'Password change fail', 'data'=>'']);
+                return response(['status'=>false, 'message'=>'Password changed fail', 'data'=>'']);
             } else {
-                return response(['status'=>true, 'message'=>'Password change Successful', 'data'=>'']);
+                return response(['status'=>true, 'message'=>'Password changed successful', 'data'=>'']);
             }
         } else {
             return response(['status'=>false, 'message'=>'Password dosn´t mismatch', 'data'=>[]]);
