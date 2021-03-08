@@ -41,7 +41,7 @@ $router->group(['prefix' => 'api', 'middleware' => ['auth', 'client']], function
     $router->get('faq/{id}', 'FaqController@show');
     $router->post('/faq','FaqController@create');
     $router->post('/faq/{id}','FaqController@update');
-    $router->delete('/faq','FaqController@delete');
+    $router->delete('/faq/{id}','FaqController@delete');
 
 
     // Visitors
