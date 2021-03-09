@@ -65,15 +65,14 @@ class FaqController extends Controller
     public function update(Request $request, $id) {
         $faq = Faq::find($id);
 
-        $faq->email = $request['email'] ?? $faq->email;
-        $faq->city = $request['city'] ?? $faq->city;
-        $faq->country = $request['country'] ?? $faq->country;
+        $faq->ask = $request['ask'] ?? $faq->ask;
+        $faq->answer = $request['answer'] ?? $faq->answer;
 
         if(!$faq->save()) {
-            return response(['status'=>false, 'message' => 'retry again, cannot update the register', 'data'=>[]]);
+            return response(['status'=>false, 'message' => 'retry again, cannot update the FAQ', 'data'=>[]]);
         }
 
-        return response(['status'=>true, 'message' => 'Register successfully updated!', 'data'=>[]]);        
+        return response(['status'=>true, 'message' => 'FAQ successfully updated!', 'data'=>[]]);        
 
     }
 
