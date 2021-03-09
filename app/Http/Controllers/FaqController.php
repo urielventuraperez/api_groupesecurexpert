@@ -20,7 +20,7 @@ class FaqController extends Controller
     }
 
     public function index() {
-        $faq = Faq::where('active', 1)->paginate(15);
+        $faq = Faq::where('active', 1)->get();
 
         if ($faq) {
             return response([
