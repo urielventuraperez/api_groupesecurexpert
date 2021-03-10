@@ -40,4 +40,10 @@ class Company extends Model
     {
         return $this->hasMany(Rate::class);
     }
+
+    public function insurances()
+    {
+        return $this->hasMany(Insurance::class);
+    }
+
 }

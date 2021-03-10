@@ -3,7 +3,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class SocialFacebookAccount extends Model
+class Insurance extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -21,4 +21,10 @@ class SocialFacebookAccount extends Model
      * @var array
      */
     protected $hidden = [];
+
+    public function Companies()
+    {
+      return $this->hasMany(Company::class);
+    }
+
 }
