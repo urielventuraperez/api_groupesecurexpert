@@ -26,9 +26,14 @@ class Company extends Model
      */
     protected $hidden = [];
 
+    public function insurances()
+    {
+        return $this->hasMany(Detail::class);
+    }
+
     public function details()
     {
-        return $this->belongsToMany('App\Models\TitleDetail', 'details')->withPivot('content');;
+        return $this->hasMany(Detail::class);
     }
 
     public function deductibles()
@@ -39,11 +44,6 @@ class Company extends Model
     public function rates()
     {
         return $this->hasMany(Rate::class);
-    }
-
-    public function insurances()
-    {
-        return $this->hasMany(Insurance::class);
     }
 
 }

@@ -29,7 +29,11 @@ class FaqController extends Controller
                 'data' => $faq
             ]);
         } else {
-
+          return response([
+            'status' => false,
+            'message' => 'doesn´t exist registers',
+            'data' => [],
+          ]);
         }
 
     }

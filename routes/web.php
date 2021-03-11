@@ -35,6 +35,8 @@ $router->group(['prefix' => 'api', 'middleware' => ['auth', 'client']], function
     // Roles
     $router->get('/roles','RoleController@index');
 
+    // Insurances
+    $router->get('/insurances', 'InsuranceController@index');
 
     // Faqs
     $router->get('/faq', 'FaqController@index');

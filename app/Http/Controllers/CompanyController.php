@@ -3,12 +3,16 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Company;
+use App\Models\Detail;
 use App\Models\Deductible;
+use App\Models\Insurance;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Str;
 
 use Carbon\Carbon;
-
+use Illuminate\Contracts\Cache\Store;
 use Validator;
 
 class CompanyController extends Controller
@@ -24,31 +28,33 @@ class CompanyController extends Controller
     }
 
     public function index() {
-        $company = Company::paginate(15);
-
-        if ($company) {
-            return response([
-                'status' => true,
-                'message' => '',
-                'data' => $company
+        $companies = Company::get();
+        if ($companies) {          
+          return response([
+              'status' => true,
+              'message' => '',
+              'data' => $companies
             ]);
         } else {
-
+          return response([
+            'status' => false,
+            'message' => 'doesn´t exist registers',
+            'data' => []
+        ]);
         }
-
     }
 
     public function show($id) {
         $company = Company::findOrFail($id);
 
-        $details = $company->details()->get();
-        $deductibles = $company->deductibles()->get();
-        $rates = $company->rates()->get();
+        $insurances = DB::table('Insurances')
+          ->join('details', 'insurances.id', '=', 'details.insurance_id')
+          ->where('details.company_id', $id)
+          ->select('insurances.id', 'insurances.name')
+          ->get();
 
-        $company['details'] = $details;
-        $company['deductibles'] = $deductibles;
-        
         if ($company) {
+          $company['insurances'] = $insurances;
             return response([
                 'status' => true, 
                 'message' => '', 
@@ -75,11 +81,12 @@ class CompanyController extends Controller
         $input['logo'] = $request->file('logo')->getClientOriginalName();
         $input['slug'] = Str::of($request->name)->slug('-');
         $company = new Company();
+
         if(!$company->create($input)) {
             return response(['status'=>false, 'message' => 'retry again, cannot save the register', 'data'=>[]]);
         }
         $request->file('logo')->storeAs('companies', $input['logo']);
-
+        
         return response(['status'=>true, 'message' => 'Register successfully created!', 'data'=>[]]);
 
     }
