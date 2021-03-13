@@ -19,6 +19,7 @@ $router->get('/', function () use ($router) {
 
 // Unauth routes
 $router->post('/login','UserController@login');
+$router->post('/super-admin/register','UserController@superadmin_register');
 
 //Auth routes middleware
 $router->group(['prefix' => 'api', 'middleware' => ['auth', 'client']], function () use ($router) {

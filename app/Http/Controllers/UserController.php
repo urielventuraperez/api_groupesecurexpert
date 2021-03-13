@@ -23,6 +23,40 @@ class UserController extends Controller
         //
     }
 
+    public function superadmin_register(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:8',
+            'role_id' => 'required'
+        ]);
+
+        if($validator->fails()){
+            return response(['message' => 'Validation errors', 'errors' =>  $validator->errors(), 'status' => false], 422);
+        }
+
+        $input = $request->all();
+            
+        if(!User::where('email', $input['email'])->first()) {
+            $input = $request->all();
+            $input['password'] = Hash::make($input['password']);
+            
+            $user = User::create($input);
+            
+            /** User authentication access token generated **/
+            $user->createToken('api_groupesecurexpert')->accessToken;
+            $newUser =  $user->email;
+
+            return response(['data' => [], 'message' => $newUser . ' account created successfully!', 'status' => true]);
+        } else {
+            return response(['data' => [], 'message' => 'Unauthorized', 'status' => false]);
+        }
+
+    }
+
+
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
