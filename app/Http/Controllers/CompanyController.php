@@ -79,15 +79,27 @@ class CompanyController extends Controller
 
         $input = $request->all();
         $input['logo'] = $request->file('logo')->getClientOriginalName();
-        $input['slug'] = Str::of($request->name)->slug('-');
+        $slug = Str::of($request->name)->slug('-');
+
+        // Check if Slug exists
+        $checkSlug = Company::where('slug', 'like', '%'. $slug .'%')->get();
+
+        if($checkSlug->count() == 0) {
+            $input['slug'] = $slug;
+        } else {
+            $input['slug'] = $slug . '-' . $checkSlug->count();
+        }
+
         $company = new Company();
 
         if(!$company->create($input)) {
             return response(['status'=>false, 'message' => 'retry again, cannot save the register', 'data'=>[]]);
         }
         $request->file('logo')->storeAs('companies', $input['logo']);
+
+        $newCompany = Company::where('slug', $input['slug'])->first();
         
-        return response(['status'=>true, 'message' => 'Register successfully created!', 'data'=>[]]);
+        return response(['status'=>true, 'message' => 'Register successfully created!', 'data'=>[$newCompany]]);
 
     }
     
