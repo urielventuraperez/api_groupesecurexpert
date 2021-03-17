@@ -137,7 +137,7 @@ class CompanyController extends Controller
             return response(['status'=>false, 'message' => 'retry again, cannot delete the register', 'data'=>[]]);
         }
 
-        return response(['status'=>true, 'message' => 'Register successfully updated!', 'data'=>[]]);
+        return response([ 'status'=>true, 'message' => 'Register successfully updated!', 'data'=>$company->active ]);
 
     }
 
