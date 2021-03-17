@@ -99,7 +99,7 @@ class CompanyController extends Controller
 
         $newCompany = Company::where('slug', $input['slug'])->first();
         
-        return response(['status'=>true, 'message' => 'Register successfully created!', 'data'=>[$newCompany]]);
+        return response(['status'=>true, 'message' => 'Register successfully created!', 'data'=>$newCompany ]);
 
     }
     
