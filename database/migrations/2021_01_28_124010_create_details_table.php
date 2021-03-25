@@ -17,7 +17,7 @@ class CreateDetailsTable extends Migration
             $table->id();
             $table->longText('content');
             $table->foreignId('company_id')->constrained('companies');
-            $table->foreignId('title_detail_id')->constrained('title_details');
+            $table->foreignId('title_detail_id')->constrained('title_details')->nullable();
             $table->timestamps();
         });
     }
