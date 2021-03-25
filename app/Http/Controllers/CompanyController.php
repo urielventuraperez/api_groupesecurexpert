@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
 use App\Models\Company;
 use App\Models\Detail;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Contracts\Cache\Store;
 use Validator;
 
@@ -27,44 +29,47 @@ class CompanyController extends Controller
         //
     }
 
-    public function index() {
+    public function index()
+    {
         $companies = Company::get();
-        if ($companies) {          
-          return response([
-              'status' => true,
-              'message' => '',
-              'data' => $companies
+        if ($companies) {
+            return response([
+                'status' => true,
+                'message' => '',
+                'data' => $companies
             ]);
         } else {
-          return response([
-            'status' => false,
-            'message' => 'doesn´t exist registers',
-            'data' => []
-        ]);
+            return response([
+                'status' => false,
+                'message' => 'doesn´t exist registers',
+                'data' => []
+            ]);
         }
     }
 
-    public function show($id) {
+    public function show($id)
+    {
+        try{
         $company = Company::findOrFail($id);
+            $insurances = DB::table('Insurances')
+                ->join('details', 'insurances.id', '=', 'details.insurance_id')
+                ->where('details.company_id', $id)
+                ->select('insurances.id', 'insurances.name')
+                ->get();
 
-        $insurances = DB::table('Insurances')
-          ->join('details', 'insurances.id', '=', 'details.insurance_id')
-          ->where('details.company_id', $id)
-          ->select('insurances.id', 'insurances.name')
-          ->get();
-
-        if ($company) {
-          $company['insurances'] = $insurances;
+            $company['insurances'] = $insurances;
             return response([
-                'status' => true, 
-                'message' => '', 
-                'data' => $company]);
-        } else {
+                'status' => true,
+                'message' => '',
+                'data' => $company
+            ]);
+        } catch (Exception $e) {
             return response(['status' => false, 'message' => 'doesn´t exist the register']);
         }
     }
 
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
 
         $validator = Validator::make($request->all(), [
             'name' => 'required',
@@ -73,7 +78,7 @@ class CompanyController extends Controller
             'order_url' => 'min:10'
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response(['message' => 'Validation errors', 'errors' =>  $validator->errors(), 'status' => false], 422);
         }
 
@@ -82,9 +87,9 @@ class CompanyController extends Controller
         $slug = Str::of($request->name)->slug('-');
 
         // Check if Slug exists
-        $checkSlug = Company::where('slug', 'like', '%'. $slug .'%')->get();
+        $checkSlug = Company::where('slug', 'like', '%' . $slug . '%')->get();
 
-        if($checkSlug->count() == 0) {
+        if ($checkSlug->count() == 0) {
             $input['slug'] = $slug;
         } else {
             $input['slug'] = $slug . '-' . $checkSlug->count();
@@ -92,75 +97,74 @@ class CompanyController extends Controller
 
         $company = new Company();
 
-        if(!$company->create($input)) {
-            return response(['status'=>false, 'message' => 'retry again, cannot save the register', 'data'=>[]]);
+        if (!$company->create($input)) {
+            return response(['status' => false, 'message' => 'retry again, cannot save the register', 'data' => []]);
         }
         $request->file('logo')->storeAs('companies', $input['logo']);
 
         $newCompany = Company::where('slug', $input['slug'])->first();
-        
-        return response(['status'=>true, 'message' => 'Register successfully created!', 'data'=>$newCompany ]);
 
+        return response(['status' => true, 'message' => 'Register successfully created!', 'data' => $newCompany]);
     }
-    
-    public function update(Request $request, $id) {
+
+    public function update(Request $request, $id)
+    {
         $company = Company::find($id);
 
         $company->email = $request['email'] ?? $company->email;
         $company->city = $request['city'] ?? $company->city;
         $company->country = $request['country'] ?? $company->country;
 
-        if(!$company->save()) {
-            return response(['status'=>false, 'message' => 'retry again, cannot update the register', 'data'=>[]]);
+        if (!$company->save()) {
+            return response(['status' => false, 'message' => 'retry again, cannot update the register', 'data' => []]);
         }
 
-        return response(['status'=>true, 'message' => 'Register successfully updated!', 'data'=>[]]);        
-
+        return response(['status' => true, 'message' => 'Register successfully updated!', 'data' => []]);
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $company = Company::findOrFail($id);
 
-        if(!$company->delete()) {
-            return response(['status'=>false, 'message' => 'retry again, cannot delete the register', 'data'=>[]]);
+        if (!$company->delete()) {
+            return response(['status' => false, 'message' => 'retry again, cannot delete the register', 'data' => []]);
         }
 
-        return response(['status'=>true, 'message' => 'Register successfully deleted!', 'data'=>[]]);
+        return response(['status' => true, 'message' => 'Register successfully deleted!', 'data' => []]);
     }
 
-    public function active($id) {
+    public function active($id)
+    {
         $company = Company::findOrFail($id);
 
         $company->active = !$company->active;
 
-        if(!$company->save()) {
-            return response(['status'=>false, 'message' => 'retry again, cannot delete the register', 'data'=>[]]);
+        if (!$company->save()) {
+            return response(['status' => false, 'message' => 'retry again, cannot delete the register', 'data' => []]);
         }
 
-        return response([ 'status'=>true, 'message' => 'Register successfully updated!', 'data'=>$company->active ]);
-
+        return response(['status' => true, 'message' => 'Register successfully updated!', 'data' => $company->active]);
     }
 
-    public function relationDetail($id, Request $request) {
+    public function relationDetail($id, Request $request)
+    {
 
         $company = Company::find($id);
         $detail_id = $request->detail;
         $content = $request->content;
-        $company->details()->attach($detail_id, ['content'=>$content]);
-        return response(['status'=>true, 'message'=>'save', 'data'=>[]]);
-
+        $company->details()->attach($detail_id, ['content' => $content]);
+        return response(['status' => true, 'message' => 'save', 'data' => []]);
     }
 
-    public function deleteRelationDetail($id_company, $id_detail) 
+    public function deleteRelationDetail($id_company, $id_detail)
     {
         $company = Company::find($id_company);
 
         if ($company->details()->detach($id_detail)) {
 
-            return response(['status'=>true, 'message'=>'Register deleted', 'data'=>[]]);
-
-        } return response(['status'=>true, 'message'=>'Register doesn´t deleted', 'data'=>[]]);
-
+            return response(['status' => true, 'message' => 'Register deleted', 'data' => []]);
+        }
+        return response(['status' => true, 'message' => 'Register doesn´t deleted', 'data' => []]);
     }
 
     public function updateRelationDetail($id_company, $id_detail, Request $request)
@@ -171,5 +175,4 @@ class CompanyController extends Controller
             'content' => $request->content,
         ]);
     }
-
 }
