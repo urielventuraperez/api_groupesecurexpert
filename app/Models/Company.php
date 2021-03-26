@@ -28,7 +28,9 @@ class Company extends Model
 
     public function insurances()
     {
-        return $this->hasMany(Detail::class);
+        return $this->hasMany(Detail::class)
+        ->join('insurances', 'insurances.id', '=', 'details.insurance_id')
+        ->select('details.*', 'insurances.name as insurance_name');
     }
 
     public function details()
