@@ -58,6 +58,7 @@ $router->group(['prefix' => 'api', 'middleware' => ['auth', 'client']], function
     $router->get('/company/{id}', 'CompanyController@show');
     $router->delete('/company/{id}', 'CompanyController@delete');
     $router->post('company/{id}', 'CompanyController@active');
+    $router->post('company/update/{id}', 'CompanyController@update');
     $router->post('company/{id}/detail', 'CompanyController@relationDetail');
     $router->post('company/{id_company}/detail/{id_detail}', 'CompanyController@updateRelationDetail');
     $router->post('company/{id_company}/detail/{id_detail}', 'CompanyController@deleteRelationDetail');

@@ -9,7 +9,6 @@ use App\Models\Deductible;
 use App\Models\Insurance;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
-
 use Illuminate\Support\Str;
 
 use Carbon\Carbon;
@@ -83,9 +82,7 @@ class CompanyController extends Controller
         }
 
         $input = $request->all();
-        $input['logo'] = $request->file('logo')->getClientOriginalName();
         $slug = Str::of($request->name)->slug('-');
-
         // Check if Slug exists
         $checkSlug = Company::where('slug', 'like', '%' . $slug . '%')->get();
 
@@ -95,12 +92,15 @@ class CompanyController extends Controller
             $input['slug'] = $slug . '-' . $checkSlug->count();
         }
 
+        $input['logo'] = $input['slug'].'-'.$request->file('logo')->getClientOriginalName();
+
         $company = new Company();
 
         if (!$company->create($input)) {
             return response(['status' => false, 'message' => 'retry again, cannot save the register', 'data' => []]);
         }
-        $request->file('logo')->storeAs('companies', $input['logo']);
+
+        $request->file('logo')->storeAs("companies", $input['logo']);
 
         $newCompany = Company::where('slug', $input['slug'])->first();
 
@@ -111,24 +111,41 @@ class CompanyController extends Controller
     {
         $company = Company::find($id);
 
-        $company->email = $request['email'] ?? $company->email;
-        $company->city = $request['city'] ?? $company->city;
-        $company->country = $request['country'] ?? $company->country;
+        $company->name = $request->name ?? $company->name;
+        $company->slug = $request->slug ?? $company->slug;
+        $company->description = $request->description ?? $company->description;
+        $company->quote = $request->quote ?? $company->quote;
+        $company->order_url = $request->order_url ?? $company->order_url;
+
+        $logo = $company->logo;
+
+        if($request->logo) {
+            $company->logo = $company->slug.'-'.$request->file('logo')->getClientOriginalName();
+        }
 
         if (!$company->save()) {
             return response(['status' => false, 'message' => 'retry again, cannot update the register', 'data' => []]);
         }
 
-        return response(['status' => true, 'message' => 'Register successfully updated!', 'data' => []]);
+        Storage::delete('companies/'.$logo);
+        $request->file('logo')->storeAs("companies", $company->logo);
+
+        return response([
+            'status' => true, 
+            'message' => 'Register successfully updated!', 
+            'data' => $company
+        ]);
     }
 
     public function delete($id)
     {
         $company = Company::findOrFail($id);
-
+        $logo = $company->logo;
         if (!$company->delete()) {
             return response(['status' => false, 'message' => 'retry again, cannot delete the register', 'data' => []]);
         }
+
+        Storage::delete('companies/'.$logo);
 
         return response(['status' => true, 'message' => 'Register successfully deleted!', 'data' => []]);
     }
