@@ -31,7 +31,7 @@ class Detail extends Model
 
     public function insurances()
     {
-        return $this->belongsTo(Insurance::class);
+        return $this->belongsToMany(Insurance::class);
     }
 
 }

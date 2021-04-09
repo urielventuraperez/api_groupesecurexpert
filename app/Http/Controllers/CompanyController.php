@@ -30,7 +30,7 @@ class CompanyController extends Controller
 
     public function index()
     {
-        $companies = Company::get();
+        $companies = Company::with('insurances')->get();
         if ($companies) {
             return response([
                 'status' => true,
@@ -82,6 +82,15 @@ class CompanyController extends Controller
         }
 
         $input = $request->all();
+<<<<<<< HEAD
+=======
+
+        if ($request->file('logo')) {
+          $input['logo'] = $request->file('logo')->getClientOriginalName();
+          $request->file('logo')->storeAs('companies', $input['logo']);
+        }
+
+>>>>>>> 5df8c14f0e36670d543aa51b95957203b982822c
         $slug = Str::of($request->name)->slug('-');
         // Check if Slug exists
         $checkSlug = Company::where('slug', 'like', '%' . $slug . '%')->get();
@@ -99,8 +108,11 @@ class CompanyController extends Controller
         if (!$company->create($input)) {
             return response(['status' => false, 'message' => 'retry again, cannot save the register', 'data' => []]);
         }
+<<<<<<< HEAD
 
         $request->file('logo')->storeAs("companies", $input['logo']);
+=======
+>>>>>>> 5df8c14f0e36670d543aa51b95957203b982822c
 
         $newCompany = Company::where('slug', $input['slug'])->first();
 
