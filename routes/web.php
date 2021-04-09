@@ -63,6 +63,9 @@ $router->group(['prefix' => 'api', 'middleware' => ['auth', 'client']], function
     $router->post('company/{id_company}/detail/{id_detail}', 'CompanyController@updateRelationDetail');
     $router->post('company/{id_company}/detail/{id_detail}', 'CompanyController@deleteRelationDetail');
 
+    // Insurances
+    $router->get('company/{id_company}/insurances', 'InsuranceController@getInsurancesByCompany');
+
     // Deductible
     $router->post('company/{id_company}/deductible', 'DeductibleController@create');
     $router->delete('company/{id_company}/deductible/{id_deductible}', 'DeductibleController@delete');
