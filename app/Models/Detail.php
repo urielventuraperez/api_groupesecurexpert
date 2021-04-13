@@ -33,5 +33,9 @@ class Detail extends Model
     {
         return $this->belongsToMany(Insurance::class);
     }
+    public function rangeYear()
+    {
+        return $this->hasMany(RangeYear::class);
+    }
 
 }

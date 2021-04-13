@@ -15,7 +15,8 @@ class CreateDetailsTable extends Migration
     {
         Schema::create('details', function (Blueprint $table) {
             $table->id();
-            $table->longText('content');
+            $table->longText('content')->nullable();
+            $table->longText('note')->nullable();
             $table->foreignId('company_id')->constrained('companies');
             $table->foreignId('title_detail_id')->constrained('title_details')->nullable();
             $table->timestamps();

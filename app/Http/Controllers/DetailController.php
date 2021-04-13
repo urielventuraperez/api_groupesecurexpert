@@ -16,6 +16,8 @@ class DetailController extends Controller
         //
     }
 
+    // Necesito devolver los insurances disponibles y todos los titulos de detalles con su contenido
+    // Por compañia
     public function index() {
         $detail = Detail::paginate(15);
 

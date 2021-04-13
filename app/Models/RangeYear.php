@@ -23,8 +23,8 @@ class RangeYear extends Model
     protected $hidden = [
     ];
 
-    public function rates() {
-        return $this->belongsTo(Rate::class);
+    public function details() {
+        return $this->belongsTo(Detail::class);
     }
 
     public function rangeSums() {
