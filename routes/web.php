@@ -46,13 +46,11 @@ $router->group(['prefix' => 'api', 'middleware' => ['auth', 'client']], function
     $router->post('/faq/{id}','FaqController@update');
     $router->delete('/faq/{id}','FaqController@delete');
 
-
     // Visitors
     $router->get('/visitors', 'VisitorController@index');
     $router->post('/visitors','VisitorController@create');
 
     // Companies
-    // Mostrar todos
     $router->get('/company', 'CompanyController@index');
     $router->post('/company', 'CompanyController@create');
     $router->get('/company/{id}', 'CompanyController@show');
@@ -75,6 +73,9 @@ $router->group(['prefix' => 'api', 'middleware' => ['auth', 'client']], function
     $router->post('company/{id_company}/rate', 'RateController@create');
     $router->post('company/{id_company}/rate/{id_rate}', 'RateController@update');
     $router->delete('company/{id_company}/rate/{id_rate}', 'RateController@delete');
+
+    // Details
+    $router->post('company/{id_company}/insurance/{id_insurance}', 'DetailController@createInsurance');
 
     // Range sums to Rates
     $router->post('rate/{id}/year','RateController@addRangeYear');

@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\TitleDetail as Detail;
+use App\Models\Detail as Details;
+
+use Validator;
 
 class DetailController extends Controller
 {
@@ -42,11 +45,27 @@ class DetailController extends Controller
         }
     }
 
-    public function create(Request $request) {
-        $detail = new Detail();
+    public function createInsurance($id_company, $id_insurance) {
         
-        $detail->name = $request['name'];
-        $detail->description = $request['description'];
+        if(empty($id_company) && empty($id_insurance)) {
+            return response([
+                'status' => false,
+                'message' => 'Please, select an company or insurance',
+                'data' => []
+            ]);
+        }
+
+        $checkIfExist = Details::where('company_id', $id_company)
+            ->where('insurance_id', $id_insurance)->first();
+        
+        if($checkIfExist) {
+            return response(['status'=>false, 'message' => 'retry again, cannot save the register. Exist the detail.', 'data'=>[]]);
+        }
+
+        $detail = new Details();
+        
+        $detail->company_id = $id_company;
+        $detail->insurance_id = $id_insurance;
 
         if(!$detail->save()) {
             return response(['status'=>false, 'message' => 'retry again, cannot save the register', 'data'=>[]]);

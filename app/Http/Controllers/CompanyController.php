@@ -53,7 +53,7 @@ class CompanyController extends Controller
             $insurances = DB::table('Insurances')
                 ->join('details', 'insurances.id', '=', 'details.insurance_id')
                 ->where('details.company_id', $id)
-                ->select('insurances.id', 'insurances.name')
+                ->select('insurances.id', 'insurances.name', 'details.created_at')
                 ->get();
 
             $company['insurances'] = $insurances;
