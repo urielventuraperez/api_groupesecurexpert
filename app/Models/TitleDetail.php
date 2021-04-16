@@ -29,4 +29,9 @@ class TitleDetail extends Model
         return $this->belongsToMany('App\Models\Company', 'details');
     }
 
+    public function details()
+    {
+        return $this->hasMany(Detail::class, 'details');
+    }
+
 }

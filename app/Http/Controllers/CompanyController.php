@@ -49,14 +49,7 @@ class CompanyController extends Controller
     public function show($id)
     {
         try{
-        $company = Company::findOrFail($id);
-            $insurances = DB::table('Insurances')
-                ->join('details', 'insurances.id', '=', 'details.insurance_id')
-                ->where('details.company_id', $id)
-                ->select('insurances.id', 'insurances.name', 'details.created_at')
-                ->get();
-
-            $company['insurances'] = $insurances;
+        $company = Company::with('insurances')->findOrFail($id);
             return response([
                 'status' => true,
                 'message' => '',

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
 use Illuminate\Http\Request;
 use App\Models\Insurance;
 use App\Models\Detail;
@@ -43,12 +44,14 @@ class InsuranceController extends Controller
 
     public function getInsurancesByCompany($id_company)
     {
-      $insurances = Insurance::all(['id', 'name'])->toArray();
-      $details = Detail::select('insurance_id')->where('company_id', $id_company)->get();
+      $insurances = Insurance::all()->toArray();
+      $details = Insurance::whereHas('companies', function($query) use($id_company) {
+        return $query->where('company_id', '=', $id_company);
+      })->get();
+
       $available_insurances = [];
 
       if ($details->isEmpty()) {
-
         foreach($insurances as $key=>$insurance) {
           $available_insurances[$key] = $insurance;
           $available_insurances[$key]['available'] = true;
@@ -63,7 +66,7 @@ class InsuranceController extends Controller
 
       foreach($insurances as $key=>$insurance) {
         foreach($details as $detail) {
-            if($detail->insurance_id == $insurance['id'] ){
+            if($detail->id == $insurance['id'] ){
               $available_insurances[$key] = $insurance;
               $available_insurances[$key]['available'] = false;
               break;

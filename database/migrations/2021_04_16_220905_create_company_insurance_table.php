@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDetailsTable extends Migration
+class CreateCompanyInsuranceTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class CreateDetailsTable extends Migration
      */
     public function up()
     {
-        Schema::create('details', function (Blueprint $table) {
+        Schema::create('company_insurance', function (Blueprint $table) {
             $table->id();
-            $table->longText('content')->nullable();
-            $table->longText('note')->nullable();
-            $table->foreignId('title_detail_id')->constrained('title_details')->nullable();
+            $table->foreignId('company_id')->constrained('companies');
+            $table->foreignId('insurance_id')->constrained('insurances');
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ class CreateDetailsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('details');
+        Schema::dropIfExists('companies_insurances');
     }
 }

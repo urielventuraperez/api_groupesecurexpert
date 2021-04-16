@@ -26,13 +26,19 @@ class Detail extends Model
     
     public function companies()
     {
-        return $this->belongsToMany(Company::class);
+        return $this->belongsTo(Company::class, 'company_id');
     }
 
     public function insurances()
     {
-        return $this->belongsToMany(Insurance::class);
+        return $this->belongsTo(Insurance::class, 'insurance_id');
     }
+    
+    public function titleDetails()
+    {
+        return $this->belongsTo(TitleDetail::class, 'title_detail_id');
+    }
+
     public function rangeYear()
     {
         return $this->hasMany(RangeYear::class);

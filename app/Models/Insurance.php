@@ -22,6 +22,11 @@ class Insurance extends Model
      */
     protected $hidden = ['pivot'];
 
+    public function companies()
+    {
+      return $this->belongsToMany(Company::class);
+    }
+
     public function details()
     {
       return $this->hasMany(Details::class);

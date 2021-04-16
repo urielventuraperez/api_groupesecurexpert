@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use App\Models\TitleDetail as Detail;
+use App\Models\TitleDetail;
 use App\Models\Detail as Details;
 
 use Validator;
@@ -22,7 +22,7 @@ class DetailController extends Controller
     // Necesito devolver los insurances disponibles y todos los titulos de detalles con su contenido
     // Por compañia
     public function index() {
-        $detail = Detail::paginate(15);
+        $detail = TitleDetail::paginate(15);
 
         if ($detail) {
             return response([
@@ -37,7 +37,7 @@ class DetailController extends Controller
     }
 
     public function show($id) {
-        $detail = Detail::findOrFail($id);
+        $detail = TitleDetail::findOrFail($id);
         if ($detail) {
             return response(['status' => true, 'message' => '', 'data' => $detail]);
         } else {
@@ -61,14 +61,15 @@ class DetailController extends Controller
         if($checkIfExist) {
             return response(['status'=>false, 'message' => 'retry again, cannot save the register. Exist the detail.', 'data'=>[]]);
         }
-
-        $detail = new Details();
         
-        $detail->company_id = $id_company;
-        $detail->insurance_id = $id_insurance;
-
-        if(!$detail->save()) {
-            return response(['status'=>false, 'message' => 'retry again, cannot save the register', 'data'=>[]]);
+        // Adjuntamos todos lso títulos de detalles
+        $titleDetails = TitleDetail::all();
+        foreach($titleDetails as $titleDetail) {
+            $detail = new Details();
+            $detail->companies()->associate($id_company);    
+            $detail->insurances()->associate($id_insurance);
+            $detail->titleDetails()->associate($titleDetail);
+            $detail->save();
         }
 
         return response(['status'=>true, 'message' => 'Register successfully created!', 'data'=>[]]);
@@ -76,7 +77,7 @@ class DetailController extends Controller
     }
     
     public function update(Request $request, $id) {
-        $detail = Detail::find($id);
+        $detail = TitleDetail::find($id);
 
         $detail->name = $request['name'] ?? $detail->name;
         $detail->description = $request['description'] ?? $detail->description;
@@ -90,7 +91,7 @@ class DetailController extends Controller
     }
 
     public function delete($id) {
-        $detail = Detail::findOrFail($id);
+        $detail = TitleDetail::findOrFail($id);
 
         if(!$detail->delete()) {
             return response(['status'=>false, 'message' => 'retry again, cannot delete the register', 'data'=>[]]);
