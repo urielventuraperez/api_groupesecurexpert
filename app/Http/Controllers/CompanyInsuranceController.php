@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\TitleDetail;
 use App\Models\Detail as Details;
+use App\Models\Company;
+use App\Models\Insurance;
 
 use Validator;
 
-class DetailController extends Controller
+class CompanyInsuranceController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -43,6 +45,40 @@ class DetailController extends Controller
         } else {
             return response(['status' => false, 'message' => 'doesn´t exist the register']);
         }
+    }
+
+    public function createInsurance($id_company, $id_insurance) {
+        
+        if(empty($id_company) && empty($id_insurance)) {
+            return response([
+                'status' => false,
+                'message' => 'Please, select an company or insurance',
+                'data' => []
+            ]);
+        }
+
+        $company = Company::find($id_company);
+        $hasInsurance = $company->insurances()->where('insurance_id', $id_insurance)->exists();
+        
+        if($hasInsurance) {
+            return response(['status'=>false, 'message' => 'retry again, cannot save the register. Exist the detail.', 'data'=>[]]);
+        }
+        
+        $company->insurances()->attach($id_insurance);
+
+        // Adjuntamos todos los títulos de detalles
+        $titleDetails = TitleDetail::all();
+        foreach($titleDetails as $titleDetail) {
+            // LLamar de una función para agregar los detalles
+            $detail = new Details();
+            $detail->companies()->associate($id_company);    
+            $detail->insurances()->associate($id_insurance);
+            $detail->titleDetails()->associate($titleDetail);
+            $detail->save();
+        };
+
+        return response(['status'=>true, 'message' => 'Register successfully created!', 'data'=>[]]);
+
     }
     
     public function update(Request $request, $id) {

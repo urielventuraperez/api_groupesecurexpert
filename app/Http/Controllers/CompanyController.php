@@ -50,6 +50,14 @@ class CompanyController extends Controller
     {
         try{
         $company = Company::with('insurances')->findOrFail($id);
+            foreach($company->insurances as $insurance) {
+                $id_insurance = $insurance->id;
+                $details = Detail::where('company_id', $id)
+                    ->where('insurance_id', $id_insurance)
+                    ->get();
+                $insurance['details'] = $details;
+            };
+
             return response([
                 'status' => true,
                 'message' => '',

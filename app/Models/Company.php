@@ -28,12 +28,7 @@ class Company extends Model
 
     public function insurances()
     {
-        return $this->belongsToMany(Insurance::class);
-        /**
-         *         ->join('insurances', 'insurances.id', '=', 'details.insurance_id')
-         *          ->groupBy('insurances.id')
-         *         ->select('details.*', 'insurances.name as insurance_name');
-        */
+        return $this->belongsToMany(Insurance::class)->withTimestamps()->withPivot('created_at');
     }
 
     public function details()

@@ -20,11 +20,10 @@ class Insurance extends Model
      *
      * @var array
      */
-    protected $hidden = ['pivot'];
 
     public function companies()
     {
-      return $this->belongsToMany(Company::class);
+      return $this->belongsToMany(Company::class)->withTimestamps()->withPivot('created_at');
     }
 
     public function details()
