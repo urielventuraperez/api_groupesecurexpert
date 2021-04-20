@@ -28,7 +28,7 @@ class Company extends Model
 
     public function insurances()
     {
-        return $this->belongsToMany(Insurance::class)->withTimestamps()->withPivot('created_at');
+        return $this->belongsToMany(Insurance::class)->withTimestamps()->withPivot('created_at', 'active');
     }
 
     public function details()

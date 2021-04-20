@@ -17,6 +17,7 @@ class CreateCompanyInsuranceTable extends Migration
             $table->id();
             $table->foreignId('company_id')->constrained('companies');
             $table->foreignId('insurance_id')->constrained('insurances');
+            $table->boolean('active')->default(1);
             $table->timestamps();
         });
     }
