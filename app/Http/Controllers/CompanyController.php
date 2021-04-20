@@ -54,6 +54,8 @@ class CompanyController extends Controller
                 $id_insurance = $insurance->id;
                 $details = Detail::where('company_id', $id)
                     ->where('insurance_id', $id_insurance)
+                    ->leftJoin('title_details', 'details.title_detail_id', '=', 'title_details.id')
+                    ->select('title_details.name', 'details.*')
                     ->get();
                 $insurance['details'] = $details;
             };
@@ -166,7 +168,6 @@ class CompanyController extends Controller
 
     public function relationDetail($id, Request $request)
     {
-
         $company = Company::find($id);
         $detail_id = $request->detail;
         $content = $request->content;

@@ -14,7 +14,7 @@ class AddInsuranceIdToDetails extends Migration
     public function up()
     {
         Schema::table('details', function (Blueprint $table) {
-          $table->boolean('active')->default(1);
+          $table->boolean('active')->default(0);
           $table->foreignId('company_id')->constrained('companies');
           $table->foreignId('insurance_id')->constrained('insurances');
         });

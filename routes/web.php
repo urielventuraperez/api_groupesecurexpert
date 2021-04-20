@@ -76,6 +76,7 @@ $router->group(['prefix' => 'api', 'middleware' => ['auth', 'client']], function
 
     // Details
     $router->post('company/{id_company}/insurance/{id_insurance}', 'CompanyInsuranceController@createInsurance');
+    $router->put('company/insurance/detail/{id}', 'DetailController@active');
 
     // Range sums to Rates
     $router->post('rate/{id}/year','RateController@addRangeYear');

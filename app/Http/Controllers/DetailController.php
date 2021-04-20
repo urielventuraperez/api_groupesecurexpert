@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\TitleDetail;
 use App\Models\Detail as Details;
-
+use Exception;
 use Validator;
 
 class DetailController extends Controller
@@ -44,7 +44,35 @@ class DetailController extends Controller
             return response(['status' => false, 'message' => 'doesn´t exist the register']);
         }
     }
-    
+
+    public function active($id) {
+        $detail = Details::find($id);
+
+        if($detail) {
+            $detail->active = !$detail->active;
+            try {
+                $detail->save();
+                return response([
+                    'status'=>true,
+                    'message'=>'',
+                    'data'=>$detail
+                ]);
+            } catch(Exception $e) {
+                return response([
+                    'status'=>false,
+                    'message'=>'Cannot update the register, try again.',
+                    'data'=>[]
+                ]);
+            }
+        }
+        
+        return response([
+            'status'=>false,
+            'message' => 'Register doesn´t exists',
+            'data'=>[]
+        ]);
+    }
+
     public function update(Request $request, $id) {
         $detail = TitleDetail::find($id);
 
