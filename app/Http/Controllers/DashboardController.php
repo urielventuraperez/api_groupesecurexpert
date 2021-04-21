@@ -17,7 +17,7 @@ use Exception;
 use Illuminate\Contracts\Cache\Store;
 use Validator;
 
-class CompanyController extends Controller
+class DashboardController extends Controller
 {
     /**
      * Create a new controller instance.
