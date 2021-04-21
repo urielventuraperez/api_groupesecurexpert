@@ -23,6 +23,9 @@ $router->post('/super-admin/register','UserController@superadmin_register');
 
 //Auth routes middleware
 $router->group(['prefix' => 'api', 'middleware' => ['auth', 'client']], function () use ($router) {
+    // Dashboard
+    $router->get('/dashboard', 'DashboardController@index');
+    
     // Users
     $router->post('/register','UserController@register');
     $router->post('/logout','UserController@logout');
@@ -62,6 +65,8 @@ $router->group(['prefix' => 'api', 'middleware' => ['auth', 'client']], function
     $router->post('company/{id_company}/detail/{id_detail}', 'CompanyController@deleteRelationDetail');
 
     // Insurances
+    // The next route create the insurance added the relationship with all title details
+    $router->post('company/{id_company}/insurance/{id_insurance}', 'CompanyInsuranceController@createInsurance');
     $router->get('company/{id_company}/insurances', 'InsuranceController@getInsurancesByCompany');
  
     // Deductible
@@ -75,7 +80,6 @@ $router->group(['prefix' => 'api', 'middleware' => ['auth', 'client']], function
     $router->delete('company/{id_company}/rate/{id_rate}', 'RateController@delete');
 
     // Details
-    $router->post('company/{id_company}/insurance/{id_insurance}', 'CompanyInsuranceController@createInsurance');
     $router->put('company/insurance/detail/{id}', 'DetailController@active');
 
     // Range sums to Rates

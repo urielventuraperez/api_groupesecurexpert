@@ -124,14 +124,13 @@ class CompanyController extends Controller
 
         if($request->logo) {
             $company->logo = $company->slug.'-'.$request->file('logo')->getClientOriginalName();
+            Storage::delete('companies/'.$logo);
+            $request->file('logo')->storeAs("companies", $company->logo);
         }
 
         if (!$company->save()) {
             return response(['status' => false, 'message' => 'retry again, cannot update the register', 'data' => []]);
         }
-
-        Storage::delete('companies/'.$logo);
-        $request->file('logo')->storeAs("companies", $company->logo);
 
         return response([
             'status' => true, 

@@ -1,6 +1,7 @@
 <?php
 namespace App\Models;
 
+use App\Models\Detail;
 use Illuminate\Database\Eloquent\Model;
 
 class TitleDetail extends Model
@@ -32,6 +33,18 @@ class TitleDetail extends Model
     public function details()
     {
         return $this->hasMany(Detail::class, 'details');
+    }
+
+    public static function saveTitleDetails($id_company, $id_insurance)
+    {
+        $titleDetails = TitleDetail::all();
+        foreach ($titleDetails as $titleDetail) {
+            $detail = new Detail();
+            $detail->companies()->associate($id_company);
+            $detail->insurances()->associate($id_insurance);
+            $detail->titleDetails()->associate($titleDetail);
+            $detail->save();
+        };
     }
 
 }
