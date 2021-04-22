@@ -1,10 +1,9 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class RangeYear extends Model
+class File extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -12,7 +11,10 @@ class RangeYear extends Model
      * @var array
      */
     protected $fillable = [
-        'range'
+        'title',
+        'description',
+        'url',
+        'active'
     ];
 
     /**
@@ -21,14 +23,13 @@ class RangeYear extends Model
      * @var array
      */
     protected $hidden = [
+        
     ];
 
-    public function details() {
-        return $this->belongsTo(Detail::class);
-    }
-
-    public function rangeSums() {
-        return $this->hasMany(RangeSum::class);
+    
+    public function details()
+    {
+        return $this->belongsTo(Detail::class, 'detail_id');
     }
 
 }

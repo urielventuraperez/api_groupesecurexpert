@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\RangeSum;
 use Illuminate\Http\Request;
-use App\Models\RangeYear;
+use App\Models\RateType;
 
 use Validator;
 
-class RangeYearController extends Controller
+class RateTypeController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -34,9 +34,9 @@ class RangeYearController extends Controller
         $input = $request->all();
 
         $sum = new RangeSum($input);
-        $rangeYear = RangeYear::find($id);
+        $rateType = RateType::find($id);
     
-        $rangeYear->rangeSums()->save($sum);
+        $rateType->rangeSums()->save($sum);
 
         return response([
             'status' => 'true',
@@ -49,11 +49,11 @@ class RangeYearController extends Controller
     public function updateSum($id_range, $id_sum, Request $request)
     {
 
-        $rangeYear = RangeYear::find($id_range);
-        $rangeSum = $rangeYear->rangeSum()->find($id_sum);
+        $rateType = RateType::find($id_range);
+        $rangeSum = $rateType->rangeSum()->find($id_sum);
 
         $rangeSum->sum = $request['sum'] ?? $rangeSum->sum;
-        $rangeSum->value = $request['vzlue'] ?? $rangeSum->value;
+        $rangeSum->value = $request['value'] ?? $rangeSum->value;
 
         if(!$rangeSum->save()) {
             return response(['status'=>false, 'message' => 'retry again, cannot update the register', 'data'=>[]]);
@@ -63,11 +63,11 @@ class RangeYearController extends Controller
 
     }
 
-    public function deleteeSum($id_range, $id_sum)
+    public function deleteSum($id_range, $id_sum)
     {
 
-        $rangeYear = RangeYear::find($id_range);
-        $rangeSum = $rangeYear->rangeSum()->find($id_sum);
+        $rateType = RateType::find($id_range);
+        $rangeSum = $rateType->rangeSum()->find($id_sum);
 
         if(!$rangeSum->delete()) {
             return response(['status'=>false, 'message' => 'retry again, cannot delete the register', 'data'=>[]]);

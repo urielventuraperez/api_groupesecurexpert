@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRangeYearsTable extends Migration
+class CreateFilesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,12 @@ class CreateRangeYearsTable extends Migration
      */
     public function up()
     {
-        Schema::create('range_years', function (Blueprint $table) {
+        Schema::create('files', function (Blueprint $table) {
             $table->id();
-            $table->string('range');
+            $table->string('title');
+            $table->text('description');
+            $table->text('url');
+            $table->boolean('active')->default(0);
             $table->foreignId('detail_id')->constrained('details');
             $table->timestamps();
         });
@@ -28,6 +31,6 @@ class CreateRangeYearsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('range_years');
+        Schema::dropIfExists('files');
     }
 }

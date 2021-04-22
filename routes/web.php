@@ -61,8 +61,6 @@ $router->group(['prefix' => 'api', 'middleware' => ['auth', 'client']], function
     $router->post('company/{id}', 'CompanyController@active');
     $router->post('company/update/{id}', 'CompanyController@update');
     $router->post('company/{id}/detail', 'CompanyController@relationDetail');
-    $router->post('company/{id_company}/detail/{id_detail}', 'CompanyController@updateRelationDetail');
-    $router->post('company/{id_company}/detail/{id_detail}', 'CompanyController@deleteRelationDetail');
 
     // Insurances
     // The next route create the insurance added the relationship with all title details
@@ -80,16 +78,18 @@ $router->group(['prefix' => 'api', 'middleware' => ['auth', 'client']], function
     $router->delete('company/{id_company}/rate/{id_rate}', 'RateController@delete');
 
     // Details
+    $router->get('company/insurance/detail/{id}', 'DetailController@show');
     $router->put('company/insurance/detail/{id}', 'DetailController@active');
+    $router->post('company/insurance/detail/{id}', 'DetailController@update');
 
     // Range sums to Rates
-    $router->post('rate/{id}/year','RateController@addRangeYear');
-    $router->post('rate/{id_rate}/year/{id_year}','RateController@updateRangeYear');
-    $router->delete('rate/{id_rate}/year/{id_year}','RateController@deleteRangeYear');
+    $router->post('rate/{id}/year','RateController@addRateType');
+    $router->post('rate/{id_rate}/year/{id_year}','RateController@updateRateType');
+    $router->delete('rate/{id_rate}/year/{id_year}','RateController@deleteRateType');
 
     // Range sums to Rates
-    $router->post('year/{id}/sum','RangeYearController@addSum');
-    $router->post('year/{id_range}/sum/{id_sum}','RangeYearController@updateSum');
-    $router->delete('year/{id_range}/sum/{id_sum}','RangeYearController@deleteSum');   
+    $router->post('year/{id}/sum','RateTypeController@addSum');
+    $router->post('year/{id_range}/sum/{id_sum}','RateTypeController@updateSum');
+    $router->delete('year/{id_range}/sum/{id_sum}','RateTypeController@deleteSum');   
 
 });

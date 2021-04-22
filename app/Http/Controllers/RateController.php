@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Company;
-use App\Models\RangeYear;
+use App\Models\RateType;
 use App\Models\Rate;
 
 use Validator;
@@ -25,7 +25,7 @@ class RateController extends Controller
         $rate = Rate::find($id);
 
         if($rate) {
-            $years = $rate::with('rangeYear', 'rangeYear.rangeSums')->get();
+            $years = $rate::with('rateType', 'rateType.rangeSums')->get();
 
             $rate['range'] = $years;
 
@@ -100,7 +100,7 @@ class RateController extends Controller
 
     }
 
-    public function addRangeYear($id, Request $request)
+    public function addRateType($id, Request $request)
     {
         $validator = Validator::make($request->all(), [
             'range' => 'required',
@@ -112,10 +112,10 @@ class RateController extends Controller
         
         $input = $request->all();
 
-        $rangeYear = new RangeYear($input);
+        $rateType = new RateType($input);
         $rate = Rate::find($id);
     
-        $rate->rangeYear()->save($rangeYear);
+        $rate->rateType()->save($rateType);
 
         return response([
             'message' => 'Succesfull',
@@ -124,15 +124,15 @@ class RateController extends Controller
 
     }
 
-    public function updateRangeYear($id_rate, $id_year, Request $request)
+    public function updateRateType($id_rate, $id_year, Request $request)
     {
 
         $rate = Rate::find($id_rate);
-        $rangeYear = $rate->rangeYear()->find($id_year);
+        $rateType = $rate->rateType()->find($id_year);
 
-        $rangeYear->range = $request['range'] ?? $rangeYear->range;
+        $rateType->range = $request['range'] ?? $rateType->range;
 
-        if(!$rangeYear->save()) {
+        if(!$rateType->save()) {
             return response(['status'=>false, 'message' => 'retry again, cannot update the register', 'data'=>[]]);
         }
 
@@ -140,13 +140,13 @@ class RateController extends Controller
 
     }
 
-    public function deleteRangeYear($id_rate, $id_year)
+    public function deleteRateType($id_rate, $id_year)
     {
 
         $rate = Rate::find($id_rate);
-        $rangeYear = $rate->rangeYear()->find($id_year);
+        $rateType = $rate->rateType()->find($id_year);
 
-        if(!$rangeYear->delete()) {
+        if(!$rateType->delete()) {
             return response(['status'=>false, 'message' => 'retry again, cannot delete the register', 'data'=>[]]);
         }
 

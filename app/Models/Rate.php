@@ -27,8 +27,8 @@ class Rate extends Model
         return $this->belongsTo(Company::class);
     }
     
-    public function rangeYear()
+    public function rateType()
     {
-        return $this->hasMany(RangeYear::class);
+        return $this->hasMany(RateType::class);
     }
 }

@@ -165,32 +165,4 @@ class CompanyController extends Controller
         return response(['status' => true, 'message' => 'Register successfully updated!', 'data' => $company->active]);
     }
 
-    public function relationDetail($id, Request $request)
-    {
-        $company = Company::find($id);
-        $detail_id = $request->detail;
-        $content = $request->content;
-        $company->details()->attach($detail_id, ['content' => $content]);
-        return response(['status' => true, 'message' => 'save', 'data' => []]);
-    }
-
-    public function deleteRelationDetail($id_company, $id_detail)
-    {
-        $company = Company::find($id_company);
-
-        if ($company->details()->detach($id_detail)) {
-
-            return response(['status' => true, 'message' => 'Register deleted', 'data' => []]);
-        }
-        return response(['status' => true, 'message' => 'Register doesn´t deleted', 'data' => []]);
-    }
-
-    public function updateRelationDetail($id_company, $id_detail, Request $request)
-    {
-        $company = Company::find($id_company);
-
-        $company->details()->updateExistingPivot($id_detail, [
-            'content' => $request->content,
-        ]);
-    }
 }

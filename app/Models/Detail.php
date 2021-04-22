@@ -39,9 +39,14 @@ class Detail extends Model
         return $this->belongsTo(TitleDetail::class, 'title_detail_id');
     }
 
-    public function rangeYear()
+    public function rateType()
     {
-        return $this->hasMany(RangeYear::class);
+        return $this->hasMany(RateType::class);
+    }
+
+    public function files()
+    {
+        return $this->hasMany(File::class);
     }
 
 }

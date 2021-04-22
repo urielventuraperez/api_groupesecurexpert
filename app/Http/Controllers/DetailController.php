@@ -37,12 +37,15 @@ class DetailController extends Controller
     }
 
     public function show($id) {
-        $detail = TitleDetail::findOrFail($id);
-        if ($detail) {
-            return response(['status' => true, 'message' => '', 'data' => $detail]);
-        } else {
-            return response(['status' => false, 'message' => 'doesn´t exist the register']);
-        }
+        $detail = Details::
+                    with('files')
+                    ->with('rateType')
+                    ->find($id);
+        return response([
+            'status' => true,
+            'message' => '',
+            'data' => $detail,
+        ]);
     }
 
     public function active($id) {
@@ -74,10 +77,10 @@ class DetailController extends Controller
     }
 
     public function update(Request $request, $id) {
-        $detail = TitleDetail::find($id);
+        $detail = Details::find($id);
 
-        $detail->name = $request['name'] ?? $detail->name;
-        $detail->description = $request['description'] ?? $detail->description;
+        $detail->content = $request['content'] ?? $detail->content;
+        $detail->note = $request['note'] ?? $detail->note;
 
         if(!$detail->save()) {
             return response(['status'=>false, 'message' => 'retry again, cannot update the register', 'data'=>[]]);
@@ -86,19 +89,5 @@ class DetailController extends Controller
         return response(['status'=>true, 'message' => 'Register successfully updated!', 'data'=>[]]);        
 
     }
-
-    public function delete($id) {
-        $detail = TitleDetail::findOrFail($id);
-
-        if(!$detail->delete()) {
-            return response(['status'=>false, 'message' => 'retry again, cannot delete the register', 'data'=>[]]);
-        }
-
-        return response(['status'=>true, 'message' => 'Register successfully deleted!', 'data'=>[]]);
-
-
-    }
-
-
 
 }

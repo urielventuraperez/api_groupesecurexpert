@@ -16,7 +16,6 @@ class CreateBenefitsTable extends Migration
         Schema::create('benefits', function (Blueprint $table) {
             $table->id();
             $table->string('benefit');
-            $table->foreignId('range_year_id')->constrained('range_years');
             $table->foreignId('range_sum_id')->constrained('range_sums');
             $table->timestamps();
         });
