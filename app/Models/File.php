@@ -29,7 +29,7 @@ class File extends Model
     
     public function details()
     {
-        return $this->belongsTo(Detail::class, 'detail_id');
+        return $this->belongsToMany(Detail::class);
     }
 
 }

@@ -82,6 +82,12 @@ $router->group(['prefix' => 'api', 'middleware' => ['auth', 'client']], function
     $router->put('company/insurance/detail/{id}', 'DetailController@active');
     $router->post('company/insurance/detail/{id}', 'DetailController@update');
 
+    // Files
+    $router->post('company/insurance/detail/{id}/file', 'FileController@show');
+    $router->post('company/insurance/detail/{id}/file', 'FileController@attach');
+    $router->post('company/insurance/detail/file/{id}', 'FileController@active');
+    $router->delete('company/insurance/detail/file/{id}', 'FileController@delete');
+
     // Range sums to Rates
     $router->post('rate/{id}/year','RateController@addRateType');
     $router->post('rate/{id_rate}/year/{id_year}','RateController@updateRateType');
