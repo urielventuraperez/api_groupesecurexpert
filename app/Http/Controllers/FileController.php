@@ -35,12 +35,14 @@ class FileController extends Controller
         }
 
         $file = new File();
+        
+        $url = Carbon::now()->format('YmdHs') . '_' . $request->file('file')->getClientOriginalName();
+        $file->url = $url;
 
-        $file->title = $request['title'];
+        $file->title = $request['title'] ?? $url;
         $file->description = $request['description'];
         $file->detail_id = $id;
-
-        $file->url = Carbon::now()->format('YmdHs') . '_' . $request->file('file')->getClientOriginalName();
+        $file->url = $url;
 
         if ($file->save()) {
 
