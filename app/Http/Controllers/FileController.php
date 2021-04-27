@@ -21,24 +21,6 @@ class FileController extends Controller
         //
     }
 
-    public function show($id) {
-        $files = File::where('detail_id', '=', $id)->get();
-
-        if($files) {
-            return response([
-                'status' => true,
-                'message' => '',
-                'data' => $files
-            ]);
-        }
-
-        return response([
-            'status' => false,
-            'message' => 'No data',
-            'data' => []
-        ]);
-    }
-
     // Add file
     public function attach($id, Request $request)
     {
@@ -58,12 +40,12 @@ class FileController extends Controller
         $file->description = $request['description'];
         $file->detail_id = $id;
 
-        $file->url = $request->file('file')->getClientOriginalName() . '_' . Carbon::now()->format('YmdHs');
+        $file->url = Carbon::now()->format('YmdHs') . '_' . $request->file('file')->getClientOriginalName();
 
-        if( $file->save() ){
+        if ($file->save()) {
 
             $request->file('file')->storeAs("files", $file->url);
-            
+
             return response([
                 'status' => true,
                 'message' => 'File upload succesfully',
@@ -72,7 +54,7 @@ class FileController extends Controller
                     'description' => $file->description,
                     'url' => $file->url,
                 ]
-            ]);            
+            ]);
         }
 
         return response([
@@ -82,11 +64,13 @@ class FileController extends Controller
         ]);
     }
 
-    public function active($id)
+    public function update($id, Request $request)
     {
         $file = File::find($id);
 
         if ($file) {
+            $file->title = $request['title'] ?? '';
+            $file->description = $request['description'] ?? '';
             $file->active = !$file->active;
             try {
                 $file->save();
@@ -98,7 +82,7 @@ class FileController extends Controller
             } catch (Exception $e) {
                 return response([
                     'status' => false,
-                    'message' => 'Cannot update the register, try again. '+$e,
+                    'message' => 'Cannot update the register, try again. ' + $e,
                     'data' => []
                 ]);
             }
@@ -112,17 +96,16 @@ class FileController extends Controller
     }
 
     // Delete file
-    public function deleteFile($id)
+    public function delete($id)
     {
         $data = File::findOrFail($id);
-        $file = $data->file;
+        $file = $data->url;
         if (!$data->delete()) {
             return response(['status' => false, 'message' => 'retry again, cannot delete the register', 'data' => []]);
         }
 
-        Storage::delete('files/'.$file);
+        Storage::delete('files/' . $file);
 
         return response(['status' => true, 'message' => 'Register successfully deleted!', 'data' => []]);
-
     }
 }

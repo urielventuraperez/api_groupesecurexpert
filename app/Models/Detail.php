@@ -46,7 +46,7 @@ class Detail extends Model
 
     public function files()
     {
-        return $this->hasMany(File::class, 'files');
+        return $this->hasMany(File::class);
     }
 
 }
