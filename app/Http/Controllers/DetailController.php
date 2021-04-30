@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
 use App\Models\TitleDetail;
 use App\Models\Detail as Details;
@@ -21,7 +22,8 @@ class DetailController extends Controller
 
     // Necesito devolver los insurances disponibles y todos los titulos de detalles con su contenido
     // Por compañia
-    public function index() {
+    public function index()
+    {
         $detail = TitleDetail::paginate(15);
 
         if ($detail) {
@@ -31,16 +33,15 @@ class DetailController extends Controller
                 'data' => $detail
             ]);
         } else {
-            
         }
-
     }
 
-    public function show($id) {
-        $detail = Details::
-                    with('files')
-                    ->with('rateType')
-                    ->find($id);
+    public function show($id)
+    {
+        $detail = Details::with('files')
+            ->with('rateType')
+            ->with('deductibles')
+            ->find($id);
         return response([
             'status' => true,
             'message' => '',
@@ -48,46 +49,46 @@ class DetailController extends Controller
         ]);
     }
 
-    public function active($id) {
+    public function active($id)
+    {
         $detail = Details::find($id);
 
-        if($detail) {
+        if ($detail) {
             $detail->active = !$detail->active;
             try {
                 $detail->save();
                 return response([
-                    'status'=>true,
-                    'message'=>'',
-                    'data'=>$detail
+                    'status' => true,
+                    'message' => '',
+                    'data' => $detail
                 ]);
-            } catch(Exception $e) {
+            } catch (Exception $e) {
                 return response([
-                    'status'=>false,
-                    'message'=>'Cannot update the register, try again.',
-                    'data'=>[]
+                    'status' => false,
+                    'message' => 'Cannot update the register, try again.',
+                    'data' => []
                 ]);
             }
         }
-        
+
         return response([
-            'status'=>false,
+            'status' => false,
             'message' => 'Register doesn´t exists',
-            'data'=>[]
+            'data' => []
         ]);
     }
 
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $detail = Details::find($id);
 
         $detail->content = $request['content'] ?? $detail->content;
         $detail->note = $request['note'] ?? $detail->note;
 
-        if(!$detail->save()) {
-            return response(['status'=>false, 'message' => 'retry again, cannot update the register', 'data'=>[]]);
+        if (!$detail->save()) {
+            return response(['status' => false, 'message' => 'retry again, cannot update the register', 'data' => []]);
         }
 
-        return response(['status'=>true, 'message' => 'Register successfully updated!', 'data'=>[]]);        
-
+        return response(['status' => true, 'message' => 'Register successfully updated!', 'data' => []]);
     }
-
 }

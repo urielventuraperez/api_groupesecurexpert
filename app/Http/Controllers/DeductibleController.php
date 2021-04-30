@@ -43,6 +43,42 @@ class DeductibleController extends Controller
         return response(['status' => false, 'message' => 'Cannot save the register', 'data' => []]);
     }
 
+    public function update($id_deductible, Request $request)
+    {
+        
+        $deductible = Deductible::find($id_deductible);
+
+        if ($deductible) {
+
+            if ($request->has('saving')) {
+                $deductible->is_saving = !$deductible->is_saving;
+                $deductible->save();
+                return response([
+                    'status' => true,
+                    'message' => 'Registe updated successful.',
+                    'data' => $deductible,
+                ]);
+            }
+
+            $deductible->option = $request['option'] ?? $deductible->option;
+            $deductible->applicable = $request['applicable'] ?? $deductible->applicable;
+
+            $deductible->save();
+
+            return response([
+                'status' => true,
+                'message' => 'Registe updated successful.',
+                'data' => $deductible,
+            ]);
+        }
+
+        return response([
+            'status' => false,
+            'message' => 'Register not found.',
+            'data' => [],
+        ]);
+    }
+
     public function delete($id_deductible)
     {
 
