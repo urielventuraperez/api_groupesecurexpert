@@ -27,8 +27,8 @@ class Deductible extends Model
         'is_saving' => true,
     ];
 
-    public function company()
+    public function detail()
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(Detail::class);
     }
 }

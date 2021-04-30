@@ -17,7 +17,7 @@ class CreateDeductiblesTable extends Migration
             $table->id();
             $table->double('option', 16, 2);
             $table->float('applicable', 4, 2);
-            $table->boolean('is_saving');
+            $table->boolean('is_saving')->default(1);
             $table->foreignId('detail_id')->constrained('details');
             $table->timestamps();
         });

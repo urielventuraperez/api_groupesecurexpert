@@ -39,6 +39,11 @@ class Detail extends Model
         return $this->belongsTo(TitleDetail::class, 'title_detail_id');
     }
 
+    public function deductibles()
+    {
+        return $this->hasMany(Deductible::class);
+    }
+
     public function rateType()
     {
         return $this->hasMany(RateType::class);

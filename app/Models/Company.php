@@ -36,11 +36,6 @@ class Company extends Model
         return $this->hasMany(Detail::class);
     }
 
-    public function deductibles()
-    {
-        return $this->hasMany(Deductible::class);
-    }
-
     public function rates()
     {
         return $this->hasMany(Rate::class);
