@@ -51,11 +51,7 @@ class FileController extends Controller
             return response([
                 'status' => true,
                 'message' => 'File upload succesfully',
-                'data' => [
-                    'title' => $file->title,
-                    'description' => $file->description,
-                    'url' => $file->url,
-                ]
+                'data' => $file
             ]);
         }
 
