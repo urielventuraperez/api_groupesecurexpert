@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBenefitsTable extends Migration
+class AddBenefitToRangeSumsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,8 @@ class CreateBenefitsTable extends Migration
      */
     public function up()
     {
-        Schema::create('benefits', function (Blueprint $table) {
-            $table->id();
-            $table->string('benefit');
-            $table->foreignId('range_sum_id')->constrained('range_sums');
-            $table->timestamps();
+        Schema::table('range_sums', function (Blueprint $table) {
+            $table->double('benefit', 16, 2);
         });
     }
 
@@ -28,6 +25,8 @@ class CreateBenefitsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('benefits');
+        Schema::table('range_sums', function (Blueprint $table) {
+            //
+        });
     }
 }

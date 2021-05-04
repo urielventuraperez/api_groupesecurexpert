@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRateTypesTable extends Migration
+class CreateSumsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class CreateRateTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('rate_types', function (Blueprint $table) {
+        Schema::create('sums', function (Blueprint $table) {
             $table->id();
-            $table->string('rate');
-            $table->foreignId('detail_id')->constrained('details');
+            $table->double('sum', 16, 2);
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ class CreateRateTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rate_types');
+        Schema::dropIfExists('sums');
     }
 }

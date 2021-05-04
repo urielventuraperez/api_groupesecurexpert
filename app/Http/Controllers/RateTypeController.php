@@ -24,18 +24,19 @@ class RateTypeController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'sum' => 'required',
-            'value' => 'required'
+            'years' => 'required'
         ]);
 
-        if($validator->fails()){
-            return response(['message' => 'Validation errors', 'errors' =>  $validator->errors(), 'status' => false], 422);
+        if ($validator->fails()) {
+            return response(['message' => 'Validation errors', 'errors' =>  $validator->errors(), 'status' => false]);
         }
-        
+
         $input = $request->all();
 
         $sum = new RangeSum($input);
+
         $rateType = RateType::find($id);
-    
+
         $rateType->rangeSums()->save($sum);
 
         return response([
@@ -43,7 +44,6 @@ class RateTypeController extends Controller
             'message' => 'Succesfull',
             'data' => []
         ]);
-
     }
 
     public function updateSum($id_range, $id_sum, Request $request)
@@ -55,12 +55,11 @@ class RateTypeController extends Controller
         $rangeSum->sum = $request['sum'] ?? $rangeSum->sum;
         $rangeSum->value = $request['value'] ?? $rangeSum->value;
 
-        if(!$rangeSum->save()) {
-            return response(['status'=>false, 'message' => 'retry again, cannot update the register', 'data'=>[]]);
+        if (!$rangeSum->save()) {
+            return response(['status' => false, 'message' => 'retry again, cannot update the register', 'data' => []]);
         }
 
-        return response(['status'=>true, 'message' => 'Register successfully updated!', 'data'=>[]]);        
-
+        return response(['status' => true, 'message' => 'Register successfully updated!', 'data' => []]);
     }
 
     public function deleteSum($id_range, $id_sum)
@@ -69,13 +68,10 @@ class RateTypeController extends Controller
         $rateType = RateType::find($id_range);
         $rangeSum = $rateType->rangeSum()->find($id_sum);
 
-        if(!$rangeSum->delete()) {
-            return response(['status'=>false, 'message' => 'retry again, cannot delete the register', 'data'=>[]]);
+        if (!$rangeSum->delete()) {
+            return response(['status' => false, 'message' => 'retry again, cannot delete the register', 'data' => []]);
         }
 
-        return response(['status'=>true, 'message' => 'Register successfully deleted!', 'data'=>[]]);        
-
+        return response(['status' => true, 'message' => 'Register successfully deleted!', 'data' => []]);
     }
-
-
 }

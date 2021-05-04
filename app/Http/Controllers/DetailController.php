@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\TitleDetail;
 use App\Models\Detail as Details;
+use App\Models\RangeSum;
+use App\Models\RateType;
 use Exception;
 use Validator;
 
@@ -42,6 +44,7 @@ class DetailController extends Controller
             ->with('rateType')
             ->with('deductibles')
             ->find($id);
+
         return response([
             'status' => true,
             'message' => '',

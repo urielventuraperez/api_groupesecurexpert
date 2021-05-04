@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\RangeSum;
 use Illuminate\Database\Eloquent\Model;
 
 class RateType extends Model
@@ -29,6 +30,15 @@ class RateType extends Model
 
     public function rangeSums() {
         return $this->hasMany(RangeSum::class);
+    }
+
+    public function viewRangeSums($idRateType)
+    {
+        $rangeSum = RangeSum::where('rate_type_id', $idRateType)->get();
+
+        if ($rangeSum) return $rangeSum;
+
+        return [];
     }
 
 }

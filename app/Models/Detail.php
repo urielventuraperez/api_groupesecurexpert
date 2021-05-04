@@ -46,7 +46,7 @@ class Detail extends Model
 
     public function rateType()
     {
-        return $this->hasMany(RateType::class);
+        return $this->hasMany(RateType::class)->with('rangeSums');
     }
 
     public function files()

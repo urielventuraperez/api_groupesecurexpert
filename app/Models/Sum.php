@@ -1,10 +1,9 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class RangeSum extends Model
+class Range extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -12,7 +11,7 @@ class RangeSum extends Model
      * @var array
      */
     protected $fillable = [
-        'sum', 'years'
+        'sum'
     ];
 
     /**
@@ -21,9 +20,12 @@ class RangeSum extends Model
      * @var array
      */
     protected $hidden = [
+        
     ];
 
-    public function rateType(){
-        return $this->belongsTo(RateType::class);
+    public function rangeSums()
+    {
+        return $this->hasMany(RangeSum::class);
     }
+
 }
